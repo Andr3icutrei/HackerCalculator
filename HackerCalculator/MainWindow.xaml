@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HackerCalculator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="535" Width="336">
+        Title="CristiPopesco" Height="535" Width="336">
     <Window.DataContext>
         <local:ButtonsViewModel/>
     </Window.DataContext>
@@ -107,7 +107,6 @@
                                             Click="Button_Click"
                                             BorderBrush="Green"
                                             Background="Black">
-
                                     </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -157,6 +156,21 @@
                     Background="Black"/>
         </Grid>
 
+        <Grid Margin="0,80,0,292">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="31*"/>
+                <ColumnDefinition Width="17*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+            <TextBox Name="TextBoxResult" Grid.Row="1" Background="Black" Margin="4,27,4,4" FontSize="20" Foreground="Green" BorderBrush="Green" Grid.ColumnSpan="2" 
+                     TextAlignment="Right" Text="Result: " IsReadOnly="True"/>
+            <TextBox Name="TextBoxCalculation" Margin="4,0,4,46" Grid.RowSpan="2" Background="Black"
+                     FontSize="25" Foreground="Green" BorderBrush="Green" Grid.ColumnSpan="2" TextAlignment="Right" IsReadOnly="True"/>
+        </Grid>
 
     </Grid>
 </Window>
