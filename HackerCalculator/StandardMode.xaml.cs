@@ -1,8 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -17,22 +20,64 @@ namespace HackerCalculator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class StandardMode : Window
     {
         private String _previousOperand;
         private String _currentOperand;
         private String _currentOperator;
         private String _previousOperator;
-        private int _decimalPower;
-        public MainWindow()
+        private ObservableCollection<String> _memory;
+        public StandardMode()
         {
             InitializeComponent();
-            //DataContext = this;
             _previousOperand = String.Empty;
             _currentOperand = String.Empty;
             _currentOperator = String.Empty;
             _previousOperator = String.Empty;
-            _decimalPower = 0;
+
+            this.KeyDown += MainWindow_KeyDown;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            var controls = (DataContext as ButtonsViewModel).Controls;
+
+            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
+            {
+                int numberPressed = (e.Key >= Key.D0 && e.Key <= Key.D9)
+                    ? e.Key - Key.D0
+                    : e.Key - Key.NumPad0;
+
+                ComputeAction(Convert.ToString(numberPressed));
+                return;
+            }
+
+            if(e.Key == Key.D5 && ModifierKeys.Shift == e.KeyboardDevice.Modifiers)
+            {
+                ComputeAction(controls.DictOperators[Operators.Modulo]);
+            }
+
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    ComputeAction(controls.DictOperators[Operators.Equals]);
+                    break;
+                case Key.Escape:
+                    ComputeAction(controls.DictOtherOperations[OtherOperations.C]);
+                    break;
+                case Key.Multiply:
+                    ComputeAction(controls.DictOperators[Operators.Multiply]);
+                    break;
+                case Key.Add:
+                    ComputeAction(controls.DictOperators[Operators.Addition]);
+                    break;
+                case Key.Subtract:
+                    ComputeAction(controls.DictOperators[Operators.Subtract]);
+                    break;
+                case Key.Divide:
+                    ComputeAction(controls.DictOperators[Operators.Division]);
+                    break;
+            }
         }
 
         private bool ValidateSideBySideOperators(string lastCharacter,string penultimateCharacter)
@@ -58,7 +103,7 @@ namespace HackerCalculator
             return sign == "-"; 
         }
 
-        private bool ValidateInput(string lastCharacter,string penultimateCharacter ,object sender)
+        private bool ValidateInput(string lastCharacter,string penultimateCharacter ,String content)
         {
             if (TextBoxCalculation.Text.Length >= 2)
             {
@@ -80,7 +125,7 @@ namespace HackerCalculator
                     return false;
                 }
 
-                if ((sender as Button).Content == (DataContext as ButtonsViewModel).Controls.DictOperators[Operators.Sqrt])
+                if (content == (DataContext as ButtonsViewModel).Controls.DictOperators[Operators.Sqrt])
                     for (int i = TextBoxCalculation.Text.Length - 1; i >= 0; --i)
                     {
                         if (TextBoxCalculation.Text[i] == '+' || TextBoxCalculation.Text[i] == '-')
@@ -106,11 +151,6 @@ namespace HackerCalculator
             string pattern = @"(1\/x|x\^2|sqrt\(x\)|\+/-)";
             Match match = Regex.Match(buttonContent, pattern);
             return match.Success;
-        }
-
-        private double ExecuteOperation()
-        {
-            return 0.0;
         }
 
         private bool IsDigit(String buttonContent)
@@ -255,7 +295,6 @@ namespace HackerCalculator
         }
         private void ComputeDecimalSeparator(string separator)
         {
-            _decimalPower = 1;
             TextBoxCalculation.Text += separator;
             if (_currentOperand == String.Empty)
                 _previousOperand += separator;
@@ -292,6 +331,23 @@ namespace HackerCalculator
                 TextBoxCalculation.Text = TextBoxCalculation.Text.Remove(TextBoxCalculation.Text.Length - 1);
         }
 
+        private void ComputeCE()
+        {
+            if (_currentOperand != String.Empty)
+            { 
+                _currentOperand = String.Empty;
+                TextBoxCalculation.Text = _previousOperand + _previousOperator;
+            }
+            TextBoxResult.Text = "0";
+        }
+
+        private void ComputeC()
+        {
+            TextBoxResult.Text = "0";
+            TextBoxCalculation.Text = String.Empty;
+            _previousOperand = _currentOperand = _previousOperator = _currentOperator=String.Empty;
+        }
+
         private void ComputeDelOptions(String buttonContent)
         {
             switch(buttonContent)
@@ -300,43 +356,133 @@ namespace HackerCalculator
                     ComputeDEL();
                     break;
                 case "CE":
+                    ComputeCE();
                     break;
                 case "C":
+                    ComputeC();
                     break;
+            }
+        }
+
+        private bool IsMemoryOption(String buttonContent)
+        {
+            String pattern = @"^(MC|MR|M-|MS)$";
+            Match match = Regex.Match(buttonContent, pattern);
+            return match.Success;
+        }
+
+        private void ComputeMemoryOperations(String buttonContent)
+        {
+            switch(buttonContent)
+            {
+                case "MC":
+                    break;
+                case "MR":
+                    break;
+                case "M+":
+                    break;
+                case "M-":
+                    break;
+                case "MS":
+                    break;
+            }
+        }
+        private bool IsMemoryStack(String buttonContent)
+        {
+            return buttonContent == "M>";
+        }
+
+        private void ButtonMC_Click(object sender, EventArgs e)
+        {
+            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            if (results.Count != 0)
+                results.Clear();
+        }
+
+        private void ButtonMR_Click(object sender, EventArgs e)
+        {
+            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            if (_currentOperand == String.Empty)
+            {
+                _currentOperand = results[0];
+                TextBoxCalculation.Text = _previousOperand + _previousOperator + _currentOperand;
+            }
+            else if (_previousOperand == String.Empty)
+            { 
+                _previousOperand = results[0];
+                TextBoxCalculation.Text = _previousOperand;
+            }
+        }
+
+        private void ButtonMAdd_Click(object sender, EventArgs e)
+        {
+            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            if (results.Count != 0 && TextBoxResult.Text!=String.Empty && TextBoxResult.Text!="Result:")
+            {
+                double calculation =Convert.ToDouble(results[0]) + Convert.ToDouble(TextBoxResult.Text);
+                if (calculation == Math.Floor(calculation))
+                    results[0] = Convert.ToString(Convert.ToInt32(calculation));
+                else
+                    results[0] = Convert.ToString(calculation);
+            }
+        }
+
+        private void ButtonMSubstract_Click(object sender, EventArgs e)
+        {
+            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            if (results.Count != 0 && TextBoxResult.Text != String.Empty && TextBoxResult.Text != "Result:")
+            {
+                double calculation = Convert.ToDouble(results[0]) - Convert.ToDouble(TextBoxResult.Text);
+                if (calculation == Math.Floor(calculation))
+                    results[0] = Convert.ToString(Convert.ToInt32(calculation));
+                else
+                    results[0] = Convert.ToString(calculation);
+            }
+        }
+
+        private void ButtonMS_Click(object sender, EventArgs e)
+        {
+            if (TextBoxResult.Text != String.Empty && TextBoxResult.Text != "Result:")
+                (DataContext as ButtonsViewModel).MemoryResults.Insert(0, TextBoxResult.Text);
+        }
+
+        private void ComputeAction(String content)
+        {
+            if (TextBoxCalculation.Text.Length >= 1)
+            {
+                if (ValidateInput(content, TextBoxCalculation.Text[TextBoxCalculation.Text.Length - 1].ToString(),
+                    content))
+                {
+                    if (IsDigit(content))
+                        ComputeDigit(content);
+                    else if (IsDecimalSeparator(content))
+                        ComputeDecimalSeparator(content);
+                    else if (IsSingularOperator(content))
+                        ComputeSingularOperator(content);
+                    else if (IsBinaryOperator(content))
+                        ComputeBinaryOperator(content);
+                    else if (IsEquals(content))
+                        ComputeEquals(content);
+                    else if (IsDelOption(content))
+                        ComputeDelOptions(content);
+                    else if (IsMemoryOption(content))
+                        ComputeMemoryOperations(content);
+                }
+            }
+            else
+            {
+                if (IsBinaryOperator(content))
+                    MessageBox.Show("An expression cannot start with an operator!");
+                else if (IsDigit(content) || IsDecimalSeparator(content))
+                    ComputeDigit(content);
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             String buttonContent = (sender as Button).Content.ToString();
-            if (TextBoxCalculation.Text.Length >= 1)
-            {
-                if (ValidateInput(buttonContent, TextBoxCalculation.Text[TextBoxCalculation.Text.Length - 1].ToString(),
-                    sender))
-                {
-                    if (IsDigit(buttonContent))
-                        ComputeDigit(buttonContent);
-                    else if (IsDecimalSeparator(buttonContent))
-                        ComputeDecimalSeparator(buttonContent);
-                    else if (IsSingularOperator(buttonContent))
-                        ComputeSingularOperator(buttonContent);
-                    else if (IsBinaryOperator(buttonContent))
-                        ComputeBinaryOperator(buttonContent);
-                    else if (IsEquals(buttonContent))
-                        ComputeEquals(buttonContent);
-                    else if(IsDelOption(buttonContent))
-                        ComputeDelOptions(buttonContent);
-                }
-            }
-            else
-            {
-                if (IsBinaryOperator(buttonContent))
-                    MessageBox.Show("An expression cannot start with an operator!");
-                else if (IsDigit(buttonContent) || IsDecimalSeparator(buttonContent))
-                    ComputeDigit(buttonContent);
-            }
+            ComputeAction(buttonContent);
             //MessageBox.Show(_previousOperand + '\n' + _currentOperand + '\n' + _previousOperator + '\n' + _currentOperator);
         }
-
     }
 }

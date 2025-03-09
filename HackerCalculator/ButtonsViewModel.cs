@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -9,17 +11,35 @@ using System.Windows.Media;
 
 namespace HackerCalculator
 {
-    public class ButtonsViewModel
+    public class ButtonsViewModel : INotifyPropertyChanged
     {
+        private const int rows = 6;
+        private const int columns = 4;
+        private String _selectedResult;
+
+        public String SelectedResult 
+        { 
+            get { return _selectedResult; } 
+            set 
+            {
+                _selectedResult = value;
+                OnPropertyChanged(nameof(SelectedResult));
+            }
+        }
+
+        public ObservableCollection<String> MemoryResults { get; set; }
+       
         public readonly ButtonControls Controls;
         public List<List<String>> ButtonsContent { get; set; }
         public List<List<String>> TopRowContent { get; set; }
-        private const int rows = 6;
-        private const int columns = 4;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public ButtonsViewModel()
         {
             ButtonsContent = new List<List<string>>();
             Controls = new ButtonControls();
+            MemoryResults = new ObservableCollection<string>();
 
             for (int i = 0; i < rows; i++)
             {
@@ -68,6 +88,11 @@ namespace HackerCalculator
                 Controls.DictMemoryOperations[MemoryOperations.MMemory]
             };
             TopRowContent.Add(topRow);
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(propertyName)));
         }
     }
 }
