@@ -1,12 +1,136 @@
-﻿<Window x:Class="HackerCalculator.Window1"
+﻿<Window x:Class="HackerCalculator.ProgrammerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HackerCalculator"
         mc:Ignorable="d"
-        Title="ProgrammerMode" Height="450" Width="800">
-    <Grid>
-        
+        Title="ProgrammerMode" Height="535" Width="336">
+    <Window.DataContext>
+        <local:ButtonsProgrammerViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Foreground" Value="#FF20C20E" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="BorderBrush" Value="#FF20C20E" />
+            <Setter Property="Background" Value="Black" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="ComboBoxTextBoxStyle">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Foreground" Value="#FF20C20E" />
+            <Setter Property="BorderBrush" Value="#FF20C20E" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="Black">
+
+        <Grid Margin="0,291,0,0">
+            <ItemsControl Name="MatrixButtons" ItemsSource="{Binding ButtonsContent}" Margin="0,20,0,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding}" 
+                                    Click="Button_Click"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                            <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
+                        </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
+            </ItemsControl>
+        </Grid>
+
+        <Grid Margin="0,215,0,215">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="166*"/>
+                <ColumnDefinition Width="52*"/>
+                <ColumnDefinition Width="119*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+            <TextBox Name="TextBoxResult" Grid.Row="1" Background="Black" Margin="4,1,4,4" FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" 
+             TextAlignment="Right" Text="Result: " IsReadOnly="True"/>
+            <TextBox Name="TextBoxCalculation" Margin="4,-2,4,0" Background="Black"
+             FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" TextAlignment="Right" IsReadOnly="True" Height="40" VerticalAlignment="Top"/>
+
+        </Grid>
+        <Grid Margin="10,10,179,414">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Content="Change &#xD;&#xA;to Standard" 
+             Click="Button_Click" Margin="4,4,4,0"/>
+        </Grid>
+
+        <Grid Background="Black" Margin="10,97,164,309">
+            <ListBox x:Name="listBoxBase" ItemsSource="{Binding BaseItems}" 
+             HorizontalAlignment="Center" Width="158"
+             Background="Black" Foreground="Green"
+             BorderThickness="0" Margin="0,0,0,-7">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton Content="{Binding}" 
+                             GroupName="BaseGroup"
+                             Foreground="Green"
+                             Margin="2,2,2,2" BorderBrush="#FF20C20E" BorderThickness="1"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
     </Grid>
 </Window>

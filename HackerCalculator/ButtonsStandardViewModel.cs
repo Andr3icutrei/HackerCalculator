@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace HackerCalculator
 {
-    public class ButtonsViewModel : INotifyPropertyChanged
+    public class ButtonsStandardViewModel
     {
         private const int rows = 6;
         private const int columns = 4;
@@ -35,7 +35,7 @@ namespace HackerCalculator
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ButtonsViewModel()
+        public ButtonsStandardViewModel()
         {
             ButtonsContent = new List<List<string>>();
             Controls = new ButtonControls();

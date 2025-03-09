@@ -50,6 +50,16 @@ namespace HackerCalculator
         MRecall
     }
 
+    public enum HexadecimalDigits :UInt16
+    {
+        InvalidHexaDigit = 0,
+        A,
+        B,
+        C,
+        D,
+        E,
+        F
+    }
     public enum OtherOperations : UInt16
     {
         InvalidOtherOperation = 0,
@@ -63,7 +73,7 @@ namespace HackerCalculator
         public Dictionary<Digits, String> DictDigits { get; set; }
         public Dictionary<MemoryOperations, String> DictMemoryOperations { get; set; }
         public Dictionary<OtherOperations, String> DictOtherOperations { get; set; }
-
+        public Dictionary<HexadecimalDigits, String> DictHexaDigits { get; set; }
         private void FillDictOperators()
         {
             DictOperators[Operators.InvalidOperator] = "inv";
@@ -77,6 +87,18 @@ namespace HackerCalculator
             DictOperators[Operators.Square] = "x^2";
             DictOperators[Operators.Equals] = "=";
             DictOperators[Operators.AdditiveInverse] = "+/-";
+        }
+
+        private void FillDictHexaDigits()
+        {
+            DictHexaDigits[HexadecimalDigits.InvalidHexaDigit] = "inv";
+            DictHexaDigits[HexadecimalDigits.A] = "A";
+            DictHexaDigits[HexadecimalDigits.B] = "B";
+            DictHexaDigits[HexadecimalDigits.C] = "C";
+            DictHexaDigits[HexadecimalDigits.D] = "D";
+            DictHexaDigits[HexadecimalDigits.E] = "E";
+            DictHexaDigits[HexadecimalDigits.F] = "F";
+
         }
         private void FillDictDigits()
         {
@@ -119,11 +141,13 @@ namespace HackerCalculator
             DictDigits = new Dictionary<Digits, String>();
             DictMemoryOperations = new Dictionary<MemoryOperations, String>();
             DictOtherOperations = new Dictionary<OtherOperations, String>();
+            DictHexaDigits = new Dictionary<HexadecimalDigits, string>();
 
             FillDictDigits();
             FillDictMemoryOperations();
             FillDictOperators();
             FillDictOtherOperations();
+            FillDictHexaDigits();
         }
     }
 }

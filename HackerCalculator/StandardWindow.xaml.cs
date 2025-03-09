@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,14 +21,16 @@ namespace HackerCalculator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class StandardMode : Window
+    public partial class StandardWindow 
     {
-        private String _previousOperand;
-        private String _currentOperand;
-        private String _currentOperator;
-        private String _previousOperator;
         private ObservableCollection<String> _memory;
-        public StandardMode()
+
+        public string _previousOperator { get; set; }
+        public string _previousOperand { get; set; }
+        public string _currentOperand { get; set; }
+        public string _currentOperator { get; set; }
+
+        public StandardWindow()
         {
             InitializeComponent();
             _previousOperand = String.Empty;
@@ -40,7 +43,7 @@ namespace HackerCalculator
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            var controls = (DataContext as ButtonsViewModel).Controls;
+            var controls = (DataContext as ButtonsStandardViewModel).Controls;
 
             if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
             {
@@ -125,7 +128,7 @@ namespace HackerCalculator
                     return false;
                 }
 
-                if (content == (DataContext as ButtonsViewModel).Controls.DictOperators[Operators.Sqrt])
+                if (content == (DataContext as ButtonsStandardViewModel).Controls.DictOperators[Operators.Sqrt])
                     for (int i = TextBoxCalculation.Text.Length - 1; i >= 0; --i)
                     {
                         if (TextBoxCalculation.Text[i] == '+' || TextBoxCalculation.Text[i] == '-')
@@ -160,147 +163,22 @@ namespace HackerCalculator
             return digitsMatch.Success && buttonContent.Length==1;
         }
 
-        private void ComputeDigit(String buttonContent)
-        {
-            if (_previousOperand == String.Empty)
-            {
-                _previousOperand = buttonContent;
-            }
-            else
-            {
-                if (_previousOperator == String.Empty)
-                {
-                    _previousOperand += buttonContent;
-                }
-                else
-                {
-                    _currentOperand += buttonContent;
-                }
-            }
-            TextBoxCalculation.Text += buttonContent;
-        }
+        
 
         private bool IsDecimalSeparator(String buttonContent)
         {
-            return buttonContent == (DataContext as ButtonsViewModel).Controls.DictDigits[Digits.DecimalSeparator];
+            return buttonContent == (DataContext as ButtonsStandardViewModel).Controls.DictDigits[Digits.DecimalSeparator];
         }
 
-        private void ComputeBinaryOperator(String buttonContent)
-        {
-            if(_previousOperator == String.Empty)
-            {
-                _previousOperator = buttonContent;
-                TextBoxCalculation.Text += buttonContent;
-            }
-            else
-            {
-                double firstNumber = Convert.ToDouble(_previousOperand);
-                double secondNumber = Convert.ToDouble(_currentOperand);
-                double result = double.NaN;
-   
-                switch (_previousOperator)
-                {
-                    case "+":
-                        result = firstNumber + secondNumber;
-                        break;
-                    case "-":
-                        result = firstNumber - secondNumber;
-                        break;
-                    case "*":
-                        result = firstNumber * secondNumber;
-                        break;
-                    case "/":
-                        result = firstNumber / secondNumber;
-                        break;
-                    case "%":
-                        result = firstNumber % secondNumber;
-                        break;
-                    default:
-                        MessageBox.Show("error computing");
-                        break;
-                }
-                if (Math.Floor(result) != result)
-                    TextBoxResult.Text = Convert.ToString(result);
-                else
-                    TextBoxResult.Text = Convert.ToString(Convert.ToInt32(result));
-                _previousOperand = Convert.ToString(result);
-                _currentOperand = String.Empty ;
-                _previousOperator = buttonContent;
-                _currentOperator = String.Empty;
-                TextBoxCalculation.Text = _previousOperand + _previousOperator;
-            }
-        }
-
-        private double ComputeSingularOperatorExpression(String operand,String operation)
-        {
-            double result = 0.0;
-            switch (operation)
-            {
-                case "sqrt(x)":
-                    result = Math.Sqrt(Convert.ToDouble(operand));
-                    break;
-                case "x^2":
-                    result = Convert.ToDouble(operand) * Convert.ToDouble(operand);
-                    break;
-                case "1/x":
-                    result = 1 / Convert.ToDouble(operand);
-                    break;
-                case "+/-":
-                    result = -Convert.ToDouble(operand);
-                    break;
-            }
-            return result;
-        }
-        private void ComputeSingularOperator(String buttonContent)
-        {
-            double result=0.0;
-            if(_currentOperand == String.Empty)
-            {
-                if(_previousOperand !=String.Empty)
-                {
-                    result = ComputeSingularOperatorExpression(_previousOperand, buttonContent);
-                }
-            }
-            else
-            {
-                result = ComputeSingularOperatorExpression(_currentOperand, buttonContent);
-            }
-
-            if (Math.Floor(result) == result)
-                TextBoxResult.Text = Convert.ToString(Convert.ToInt32(result));
-            else
-                TextBoxResult.Text = Convert.ToString(result);
-
-            _currentOperand = result.ToString();
-        }   
+        
 
         private bool IsEquals(String buttonContent)
         {
-            var equals = (DataContext as ButtonsViewModel).Controls.DictOperators[Operators.Equals]; 
+            var equals = (DataContext as ButtonsStandardViewModel).Controls.DictOperators[Operators.Equals]; 
             return equals == buttonContent;
         }
 
-        private void ComputeEquals(String buttonContent)
-        {
-            if (_previousOperator == String.Empty)
-            {
-                TextBoxResult.Text = _previousOperand;
-            }
-            else
-            {
-                ComputeBinaryOperator(buttonContent); 
-                _previousOperator = String.Empty;
-                TextBoxCalculation.Text = TextBoxCalculation.Text.Substring(0, TextBoxCalculation.Text.Length - 1);
-            }
-        }
-        private void ComputeDecimalSeparator(string separator)
-        {
-            TextBoxCalculation.Text += separator;
-            if (_currentOperand == String.Empty)
-                _previousOperand += separator;
-            else
-                _currentOperand += separator;
-        }
+        
 
         private bool IsDelOption(String buttonContent)
         {
@@ -364,44 +242,16 @@ namespace HackerCalculator
             }
         }
 
-        private bool IsMemoryOption(String buttonContent)
-        {
-            String pattern = @"^(MC|MR|M-|MS)$";
-            Match match = Regex.Match(buttonContent, pattern);
-            return match.Success;
-        }
-
-        private void ComputeMemoryOperations(String buttonContent)
-        {
-            switch(buttonContent)
-            {
-                case "MC":
-                    break;
-                case "MR":
-                    break;
-                case "M+":
-                    break;
-                case "M-":
-                    break;
-                case "MS":
-                    break;
-            }
-        }
-        private bool IsMemoryStack(String buttonContent)
-        {
-            return buttonContent == "M>";
-        }
-
         private void ButtonMC_Click(object sender, EventArgs e)
         {
-            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            var results = (DataContext as ButtonsStandardViewModel).MemoryResults;
             if (results.Count != 0)
                 results.Clear();
         }
 
         private void ButtonMR_Click(object sender, EventArgs e)
         {
-            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            var results = (DataContext as ButtonsStandardViewModel).MemoryResults;
             if (_currentOperand == String.Empty)
             {
                 _currentOperand = results[0];
@@ -416,7 +266,7 @@ namespace HackerCalculator
 
         private void ButtonMAdd_Click(object sender, EventArgs e)
         {
-            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            var results = (DataContext as ButtonsStandardViewModel).MemoryResults;
             if (results.Count != 0 && TextBoxResult.Text!=String.Empty && TextBoxResult.Text!="Result:")
             {
                 double calculation =Convert.ToDouble(results[0]) + Convert.ToDouble(TextBoxResult.Text);
@@ -429,7 +279,7 @@ namespace HackerCalculator
 
         private void ButtonMSubstract_Click(object sender, EventArgs e)
         {
-            var results = (DataContext as ButtonsViewModel).MemoryResults;
+            var results = (DataContext as ButtonsStandardViewModel).MemoryResults;
             if (results.Count != 0 && TextBoxResult.Text != String.Empty && TextBoxResult.Text != "Result:")
             {
                 double calculation = Convert.ToDouble(results[0]) - Convert.ToDouble(TextBoxResult.Text);
@@ -443,9 +293,205 @@ namespace HackerCalculator
         private void ButtonMS_Click(object sender, EventArgs e)
         {
             if (TextBoxResult.Text != String.Empty && TextBoxResult.Text != "Result:")
-                (DataContext as ButtonsViewModel).MemoryResults.Insert(0, TextBoxResult.Text);
+                (DataContext as ButtonsStandardViewModel).MemoryResults.Insert(0, TextBoxResult.Text);
+        }
+        protected void UpdateDisplayWithGrouping()
+        {
+            string displayText = "";
+
+            if (_previousOperand != String.Empty)
+            {
+                displayText += FormatNumberWithGrouping(_previousOperand);
+            }
+
+            if (_previousOperator != String.Empty)
+            {
+                displayText += _previousOperator;
+            }
+
+            if (_currentOperand != String.Empty)
+            {
+                displayText += FormatNumberWithGrouping(_currentOperand);
+            }
+
+            TextBoxCalculation.Text = displayText;
         }
 
+        protected string FormatNumberWithGrouping(string numberStr)
+        {
+            string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            bool hasDecimalPoint = numberStr.Contains(decimalSeparator);
+
+            string integerPart;
+            string decimalPart = "";
+
+            if (hasDecimalPoint)
+            {
+                string[] parts = numberStr.Split(new[] { decimalSeparator }, StringSplitOptions.None);
+                integerPart = parts[0];
+                if (parts.Length > 1)
+                {
+                    decimalPart = decimalSeparator + parts[1];
+                }
+            }
+            else
+            {
+                integerPart = numberStr;
+            }
+
+            if (double.TryParse(integerPart, NumberStyles.AllowLeadingSign, CultureInfo.CurrentCulture, out double value))
+            {
+                string groupSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
+                string formattedInteger = value.ToString("#,0", CultureInfo.CurrentCulture);
+
+                return formattedInteger + decimalPart;
+            }
+
+            return numberStr;
+        }
+
+        protected void ComputeDigit(String buttonContent)
+        {
+            if (_previousOperand == String.Empty)
+            {
+                _previousOperand = buttonContent;
+            }
+            else
+            {
+                if (_previousOperator == String.Empty)
+                {
+                    _previousOperand += buttonContent;
+                }
+                else
+                {
+                    _currentOperand += buttonContent;
+                }
+            }
+            TextBoxCalculation.Text += buttonContent;
+
+            UpdateDisplayWithGrouping();
+        }
+
+        protected void ComputeBinaryOperator(String buttonContent)
+        {
+            if (_previousOperator == String.Empty)
+            {
+                _previousOperator = buttonContent;
+                TextBoxCalculation.Text += buttonContent;
+            }
+            else
+            {
+                double firstNumber = Convert.ToDouble(_previousOperand);
+                double secondNumber = Convert.ToDouble(_currentOperand);
+                double result = double.NaN;
+
+                switch (_previousOperator)
+                {
+                    case "+":
+                        result = firstNumber + secondNumber;
+                        break;
+                    case "-":
+                        result = firstNumber - secondNumber;
+                        break;
+                    case "*":
+                        result = firstNumber * secondNumber;
+                        break;
+                    case "/":
+                        result = firstNumber / secondNumber;
+                        break;
+                    case "%":
+                        result = firstNumber % secondNumber;
+                        break;
+                    default:
+                        MessageBox.Show("error computing");
+                        break;
+                }
+                if (Math.Floor(result) != result)
+                    TextBoxResult.Text = Convert.ToString(result);
+                else
+                    TextBoxResult.Text = Convert.ToString(Convert.ToInt32(result));
+                _previousOperand = Convert.ToString(result);
+                _currentOperand = String.Empty;
+                _previousOperator = buttonContent;
+                _currentOperator = String.Empty;
+                TextBoxCalculation.Text = _previousOperand + _previousOperator;
+            }
+        }
+
+        protected double ComputeSingularOperatorExpression(String operand, String operation)
+        {
+            double result = 0.0;
+            switch (operation)
+            {
+                case "sqrt(x)":
+                    result = Math.Sqrt(Convert.ToDouble(operand));
+                    break;
+                case "x^2":
+                    result = Convert.ToDouble(operand) * Convert.ToDouble(operand);
+                    break;
+                case "1/x":
+                    result = 1 / Convert.ToDouble(operand);
+                    break;
+                case "+/-":
+                    result = -Convert.ToDouble(operand);
+                    break;
+            }
+            return result;
+        }
+        protected void ComputeSingularOperator(String buttonContent)
+        {
+            double result = 0.0;
+            if (_currentOperand == String.Empty)
+            {
+                if (_previousOperand != String.Empty)
+                {
+                    result = ComputeSingularOperatorExpression(_previousOperand, buttonContent);
+                }
+            }
+            else
+            {
+                result = ComputeSingularOperatorExpression(_currentOperand, buttonContent);
+            }
+
+            string finalResult;
+
+            if (Math.Floor(result) == result)
+                finalResult = Convert.ToString(Convert.ToInt32(result));
+            else
+                finalResult = Convert.ToString(result);
+
+            if (_currentOperand != String.Empty)
+            {
+                _currentOperand = finalResult;
+                TextBoxCalculation.Text = _previousOperand + _previousOperator + finalResult;
+            }
+            else if (_previousOperand != String.Empty)
+            {
+                _previousOperand = finalResult;
+                TextBoxCalculation.Text = _previousOperand;
+            }
+        }
+        protected void ComputeEquals(String buttonContent)
+        {
+            if (_previousOperator == String.Empty)
+            {
+                TextBoxResult.Text = _previousOperand;
+            }
+            else
+            {
+                ComputeBinaryOperator(buttonContent);
+                _previousOperator = String.Empty;
+                TextBoxCalculation.Text = TextBoxCalculation.Text.Substring(0, TextBoxCalculation.Text.Length - 1);
+            }
+        }
+        protected void ComputeDecimalSeparator(string separator)
+        {
+            TextBoxCalculation.Text += separator;
+            if (_currentOperand == String.Empty)
+                _previousOperand += separator;
+            else
+                _currentOperand += separator;
+        }
         private void ComputeAction(String content)
         {
             if (TextBoxCalculation.Text.Length >= 1)
@@ -465,8 +511,6 @@ namespace HackerCalculator
                         ComputeEquals(content);
                     else if (IsDelOption(content))
                         ComputeDelOptions(content);
-                    else if (IsMemoryOption(content))
-                        ComputeMemoryOperations(content);
                 }
             }
             else
