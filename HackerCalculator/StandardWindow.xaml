@@ -151,5 +151,12 @@
                      FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" TextAlignment="Right" IsReadOnly="True" Height="40" VerticalAlignment="Top"/>
         </Grid>
 
+        <CheckBox Name="CheckBoxDigitGrouping" 
+             Checked="CheckBoxDigitGrouping_Check"
+             Content="Digit Grouping" 
+             Foreground="#FF20C20E" 
+             HorizontalAlignment="Left" 
+             Margin="222,10,0,0" 
+             VerticalAlignment="Top"/>
     </Grid>
 </Window>

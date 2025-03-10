@@ -39,6 +39,7 @@ namespace HackerCalculator
             _previousOperator = String.Empty;
 
             this.KeyDown += MainWindow_KeyDown;
+            this.Closing += ((System.Windows.Application.Current as App)).MainWindow_Closing;
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -342,6 +343,11 @@ namespace HackerCalculator
 
             return numberStr;
         }
+        
+        private void CheckBoxDigitGrouping_Check(object sender,RoutedEventArgs e)
+        {
+            UpdateDisplayWithGrouping();
+        }
 
         protected void ComputeDigit(String buttonContent)
         {
@@ -362,7 +368,8 @@ namespace HackerCalculator
             }
             TextBoxCalculation.Text += buttonContent;
 
-            UpdateDisplayWithGrouping();
+            if(CheckBoxDigitGrouping.IsChecked == true)
+                UpdateDisplayWithGrouping();
         }
 
         protected void ComputeBinaryOperator(String buttonContent)

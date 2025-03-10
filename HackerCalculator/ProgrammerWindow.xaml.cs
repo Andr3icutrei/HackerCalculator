@@ -17,6 +17,27 @@ using System.Windows.Shapes;
 
 namespace HackerCalculator
 {
+    public static class Extensions
+    {
+        public static IEnumerable<T> FindLogicalChildren<T>(this DependencyObject parent) where T : DependencyObject
+        {
+            foreach (object child in LogicalTreeHelper.GetChildren(parent))
+            {
+                if (child is T found)
+                {
+                    yield return found;
+                }
+
+                if (child is DependencyObject depChild)
+                {
+                    foreach (T nestedChild in depChild.FindLogicalChildren<T>())
+                    {
+                        yield return nestedChild;
+                    }
+                }
+            }
+        }
+    }
     public partial class ProgrammerWindow : Window
     {
         private string _fromBaseOperand;
@@ -27,19 +48,35 @@ namespace HackerCalculator
             _fromBaseOperand = String.Empty;
 
             this.KeyDown += MainWindow_KeyDown;
+            this.Closing += ((System.Windows.Application.Current as App)).MainWindow_Closing;
         }
+        private Button FindButtonByContent(string searchText)
+        {
+            return this.FindLogicalChildren<Button>()
+                       .FirstOrDefault(b => b.Content != null && b.Content.ToString().Equals(searchText));
+        }        
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-
-            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
+            Button? toFindButton = FindButtonByContent(e.Key.ToString());
+            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) ||
+                (e.Key >= Key.A && e.Key <= Key.F) && toFindButton != null)
             {
                 int numberPressed = (e.Key >= Key.D0 && e.Key <= Key.D9)
                     ? e.Key - Key.D0
                     : e.Key - Key.NumPad0;
-
-                ComputeAction(Convert.ToString(numberPressed));
-                return;
+                if (numberPressed >= 0)
+                {
+                    ComputeAction(Convert.ToString(numberPressed));
+                }
+                else
+                {
+                    if (e.Key >= Key.A && e.Key <= Key.F)
+                    {
+                        string letter = e.Key.ToString();
+                        ComputeAction(letter);
+                    }
+                }
             }
 
 
@@ -113,13 +150,6 @@ namespace HackerCalculator
 
             }
             return true;
-        }
-
-        private bool IsBinaryOperator(string buttonContent)
-        {
-            string pattern = @"[\+\-*/%]";
-            Match match = Regex.Match(buttonContent, pattern);
-            return match.Success;
         }
 
         private bool IsDigit(String buttonContent)
@@ -280,10 +310,7 @@ namespace HackerCalculator
             }
             else
             {
-                if (IsBinaryOperator(content))
-                    MessageBox.Show("An expression cannot start with an operator!");
-                else if (IsDigit(content) || IsDecimalSeparator(content))
-                    ComputeDigit(content);
+                ComputeDigit(content);
             }
         }
 
