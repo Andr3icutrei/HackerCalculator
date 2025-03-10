@@ -43,7 +43,6 @@ namespace HackerCalculator
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            var controls = (DataContext as ButtonsStandardViewModel).Controls;
 
             if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
             {
@@ -57,28 +56,28 @@ namespace HackerCalculator
 
             if(e.Key == Key.D5 && ModifierKeys.Shift == e.KeyboardDevice.Modifiers)
             {
-                ComputeAction(controls.DictOperators[Operators.Modulo]);
+                ComputeAction(ButtonsContents.DictOperators[Operators.Modulo]);
             }
 
             switch (e.Key)
             {
                 case Key.Enter:
-                    ComputeAction(controls.DictOperators[Operators.Equals]);
+                    ComputeAction(ButtonsContents.DictOperators[Operators.Equals]);
                     break;
                 case Key.Escape:
-                    ComputeAction(controls.DictOtherOperations[OtherOperations.C]);
+                    ComputeAction(ButtonsContents.DictOtherOperations[OtherOperations.C]);
                     break;
                 case Key.Multiply:
-                    ComputeAction(controls.DictOperators[Operators.Multiply]);
+                    ComputeAction(ButtonsContents.DictOperators[Operators.Multiply]);
                     break;
                 case Key.Add:
-                    ComputeAction(controls.DictOperators[Operators.Addition]);
+                    ComputeAction(ButtonsContents.DictOperators[Operators.Addition]);
                     break;
                 case Key.Subtract:
-                    ComputeAction(controls.DictOperators[Operators.Subtract]);
+                    ComputeAction(ButtonsContents.DictOperators[Operators.Subtract]);
                     break;
                 case Key.Divide:
-                    ComputeAction(controls.DictOperators[Operators.Division]);
+                    ComputeAction(ButtonsContents.DictOperators[Operators.Division]);
                     break;
             }
         }
@@ -128,7 +127,7 @@ namespace HackerCalculator
                     return false;
                 }
 
-                if (content == (DataContext as ButtonsStandardViewModel).Controls.DictOperators[Operators.Sqrt])
+                if (content == ButtonsContents.DictOperators[Operators.Sqrt])
                     for (int i = TextBoxCalculation.Text.Length - 1; i >= 0; --i)
                     {
                         if (TextBoxCalculation.Text[i] == '+' || TextBoxCalculation.Text[i] == '-')
@@ -160,25 +159,19 @@ namespace HackerCalculator
         {
             String pattern = @"[0-9]";
             Match digitsMatch = Regex.Match(buttonContent, pattern);
-            return digitsMatch.Success && buttonContent.Length==1;
+            return digitsMatch.Success && buttonContent.Length == 1;
         }
-
-        
 
         private bool IsDecimalSeparator(String buttonContent)
         {
-            return buttonContent == (DataContext as ButtonsStandardViewModel).Controls.DictDigits[Digits.DecimalSeparator];
+            return buttonContent == ButtonsContents.DictDigits[Digits.DecimalSeparator];
         }
-
-        
 
         private bool IsEquals(String buttonContent)
         {
-            var equals = (DataContext as ButtonsStandardViewModel).Controls.DictOperators[Operators.Equals]; 
+            var equals = ButtonsContents.DictOperators[Operators.Equals]; 
             return equals == buttonContent;
         }
-
-        
 
         private bool IsDelOption(String buttonContent)
         {
@@ -527,6 +520,14 @@ namespace HackerCalculator
             String buttonContent = (sender as Button).Content.ToString();
             ComputeAction(buttonContent);
             //MessageBox.Show(_previousOperand + '\n' + _currentOperand + '\n' + _previousOperator + '\n' + _currentOperator);
+        }
+
+        private void ChangeWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ProgrammerWindow mainWindow = new ProgrammerWindow();
+            mainWindow.Show();
+
+            this.Close();
         }
     }
 }

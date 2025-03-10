@@ -131,7 +131,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button Content="Change &#xD;&#xA;to Programmer" 
-                    Click="Button_Click" Margin="4,4,4,10"/>
+                    Click="ChangeWindow_Click" Margin="4,4,4,10"/>
         </Grid>
 
         <Grid Margin="0,157,0,273">

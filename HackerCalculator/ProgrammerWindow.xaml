@@ -28,7 +28,7 @@
     <Grid Background="Black">
 
         <Grid Margin="0,291,0,0">
-            <ItemsControl Name="MatrixButtons" ItemsSource="{Binding ButtonsContent}" Margin="0,20,0,0">
+            <ItemsControl Name="MatrixButtons" ItemsSource="{Binding ButtonsData}" Margin="0,20,0,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <ItemsControl ItemsSource="{Binding}">
@@ -36,7 +36,6 @@
                                 <ItemsPanelTemplate>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
@@ -54,12 +53,12 @@
 
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Content="{Binding}" 
-                                    Click="Button_Click"/>
+                                    <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
+                        Click="Button_Click"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
 
-                            <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
+                            <ItemsControl.AlternationCount>4</ItemsControl.AlternationCount>
                         </ItemsControl>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -113,24 +112,70 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button Content="Change &#xD;&#xA;to Standard" 
-             Click="Button_Click" Margin="4,4,4,0"/>
+             Click="ChangeWindow_Click" Margin="4,4,4,0"/>
         </Grid>
 
-        <Grid Background="Black" Margin="10,97,164,309">
-            <ListBox x:Name="listBoxBase" ItemsSource="{Binding BaseItems}" 
-             HorizontalAlignment="Center" Width="158"
-             Background="Black" Foreground="Green"
-             BorderThickness="0" Margin="0,0,0,-7">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <RadioButton Content="{Binding}" 
-                             GroupName="BaseGroup"
-                             Foreground="Green"
-                             Margin="2,2,2,2" BorderBrush="#FF20C20E" BorderThickness="1"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+
+        <Grid Background="Black" Margin="10,92,164,314">
+            <ListBox x:Name="listBoxFromBase" 
+                     ItemsSource="{Binding BaseItems}" 
+                     SelectedItem="{Binding SelectedFromBaseItem, Mode=TwoWay}"
+                     HorizontalAlignment="Left" Width="158"
+                     Background="Black" Foreground="#FF20C20E"
+                     BorderThickness="0" Margin="0,30,0,-23">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <RadioButton Content="{Binding}"
+                     GroupName="FromBaseGroup"
+                     Foreground="#FF20C20E"
+                     Margin="2,2,2,2" 
+                     BorderBrush="#FF20C20E" 
+                     BorderThickness="1"
+                     IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
+            <Label Content="From base:" Foreground="#FF20C20E" HorizontalAlignment="Left" Margin="0,4,0,0" VerticalAlignment="Top" Width="112"/>
         </Grid>
-
+        
+        <Grid Margin="187,92,10,304">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="41*"/>
+                <ColumnDefinition Width="98*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="listBoxToBase"  
+         ItemsSource="{Binding BaseItems}" 
+         SelectedItem="{Binding SelectedToBaseItem, Mode=TwoWay}"
+         HorizontalAlignment="Left" Width="136"
+         Background="Black" Foreground="#FF20C20E"
+         BorderThickness="0" Grid.ColumnSpan="2" Margin="0,35,0,-14">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <RadioButton Content="{Binding}"
+                             GroupName="ToBaseGroup"
+                             Foreground="#FF20C20E"
+                             Margin="2,2,2,2" 
+                             BorderBrush="#FF20C20E" 
+                             BorderThickness="1"
+                             IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Label Content="To base:" Foreground="#FF20C20E" HorizontalAlignment="Left" Margin="5,4,0,0" VerticalAlignment="Top" Width="94" Grid.ColumnSpan="2"/>
+        </Grid>
     </Grid>
+
+
 </Window>

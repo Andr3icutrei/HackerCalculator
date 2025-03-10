@@ -2,85 +2,99 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace HackerCalculator
 {
-    public class ButtonsProgrammerViewModel :INotifyPropertyChanged
+    public class ButtonsProgrammerViewModel : INotifyPropertyChanged
     {
         private const int rows = 5;
-        private const int columns = 5;
+        private const int columns = 4;
 
-        public readonly ButtonControls Controls;
-        public List<List<String>> ButtonsContent { get; set; }
+        public Dictionary<String,int> DictBases { get; set; }
 
-        private ObservableCollection<String> _baseItems;
+        public ObservableCollection<ObservableCollection<ButtonData>> ButtonsData { get; set; }
+        public List<List<String>> ButtonText { get; set; }
+        public bool[,] ButtonEnabledMatrix { get; set; }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private String _selectedFromBaseItem;
+        private String _selectedToBaseItem;
 
-        public ObservableCollection<String> BaseItems
+        public event PropertyChangedEventHandler PropertyChanged;
+      
+        public ObservableCollection<String> BaseItems { get; set; }
+        public String SelectedFromBaseItem
         {
-            get => _baseItems;
-            set { _baseItems = value; OnPropertyChanged(nameof(BaseItems)); }
+            get => _selectedFromBaseItem;
+            set
+            {
+                _selectedFromBaseItem = value;
+                OnPropertyChanged(nameof(SelectedFromBaseItem));
+                UpdateEnabledMatrix();
+            }
+        }
+
+        public String SelectedToBaseItem
+        {
+            get => _selectedToBaseItem;
+            set
+            {
+                _selectedToBaseItem = value;
+                OnPropertyChanged(nameof(SelectedToBaseItem));
+            }
+        }
+
+        private void UpdateEnabledMatrix()
+        {
+            ObservableCollection<ObservableCollection<ButtonData>> buttonDatas = null;
+            switch (SelectedFromBaseItem)
+            {
+                case "Binary":
+                    buttonDatas = FillDataStructures.FillButtonsDataProgrammer(FillDataStructures.FillEnabledBinaryMatrix(),
+                        ButtonText);
+                    break;
+                case "Octal":
+                    buttonDatas = FillDataStructures.FillButtonsDataProgrammer(FillDataStructures.FillEnabledOctalMatrix(),
+                       ButtonText);
+                    break;
+                case "Decimal":
+                    buttonDatas = FillDataStructures.FillButtonsDataProgrammer(FillDataStructures.FillEnabledDecimalMatrix(),
+                       ButtonText);
+                    break;
+                case "Hexadecimal":
+                    buttonDatas = FillDataStructures.FillButtonsDataProgrammer(FillDataStructures.FillEnabledHexadecimalMatrix(),
+                       ButtonText);
+                    break;
+            }
+            ButtonsData = buttonDatas;
+            OnPropertyChanged(nameof(ButtonsData));
         }
 
         private void OnPropertyChanged(string name)
         {
-            PropertyChanged?.Invoke(PropertyChanged, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public ButtonsProgrammerViewModel()
         {
-            ButtonsContent = new List<List<string>>();
-            Controls = new ButtonControls();
+            ButtonText = FillDataStructures.FillButtonsContentProgrammer(rows,columns);
+            ButtonEnabledMatrix = FillDataStructures.FillEnabledDecimalMatrix();
+            SelectedFromBaseItem = "Decimal";
+            SelectedToBaseItem = "Decimal";
+
+            ButtonsData = FillDataStructures.FillButtonsDataProgrammer(ButtonEnabledMatrix, ButtonText);
 
             BaseItems = new ObservableCollection<String>
             {
-                 "Binary", "Octal" ,"Decimal","Hexadecimal"
+                "Binary", "Octal" ,"Decimal","Hexadecimal"
             };
 
-            for (int i = 0; i < rows; i++)
-            {
-                List<string> row = new List<string>();
-                for (int j = 0; j < columns; j++)
-                {
-                    row.Add("");
-                }
-                ButtonsContent.Add(row);
-            }
-
-            ButtonsContent[0][0] = Controls.DictHexaDigits[HexadecimalDigits.A];
-            ButtonsContent[0][1] = Controls.DictHexaDigits[HexadecimalDigits.B];
-            ButtonsContent[0][2] = Controls.DictOtherOperations[OtherOperations.CE];
-            ButtonsContent[0][3] = Controls.DictOtherOperations[OtherOperations.DEL];
-            ButtonsContent[0][4] = Controls.DictOperators[Operators.Division];
-            ButtonsContent[0][4] = Controls.DictOperators[Operators.Division];
-
-            ButtonsContent[1][0] = Controls.DictHexaDigits[HexadecimalDigits.C];
-            ButtonsContent[1][1] = Controls.DictDigits[Digits.Seven];
-            ButtonsContent[1][2] = Controls.DictDigits[Digits.Eight];
-            ButtonsContent[1][3] = Controls.DictDigits[Digits.Nine];
-            ButtonsContent[1][4] = Controls.DictOperators[Operators.Multiply];
-
-            ButtonsContent[2][0] = Controls.DictHexaDigits[HexadecimalDigits.D];
-            ButtonsContent[2][1] = Controls.DictDigits[Digits.Four];
-            ButtonsContent[2][2] = Controls.DictDigits[Digits.Five];
-            ButtonsContent[2][3] = Controls.DictDigits[Digits.Six];
-            ButtonsContent[2][4] = Controls.DictOperators[Operators.Subtract];
-
-            ButtonsContent[3][0] = Controls.DictHexaDigits[HexadecimalDigits.E];
-            ButtonsContent[3][1] = Controls.DictDigits[Digits.One];
-            ButtonsContent[3][2] = Controls.DictDigits[Digits.Two];
-            ButtonsContent[3][3] = Controls.DictDigits[Digits.Three];
-            ButtonsContent[3][4] = Controls.DictOperators[Operators.Addition];
-
-            ButtonsContent[4][0] = Controls.DictHexaDigits[HexadecimalDigits.F];
-            ButtonsContent[4][1] = Controls.DictOperators[Operators.AdditiveInverse];
-            ButtonsContent[4][2] = Controls.DictDigits[Digits.Zero];
-            ButtonsContent[4][3] = Controls.DictDigits[Digits.DecimalSeparator];
-            ButtonsContent[4][4] = Controls.DictOperators[Operators.Equals];
+            DictBases = FillDataStructures.FillDictBases();
         }
     }
 }
