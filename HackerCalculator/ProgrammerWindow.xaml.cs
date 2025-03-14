@@ -40,45 +40,116 @@ namespace HackerCalculator
     }
     public partial class ProgrammerWindow : Window
     {
-        private string _fromBaseOperand;
+        private string _previousOperand;
+        private string _previousOperator;
+        private string _currentOperand;
+        private string _clipboard;
+        private TextBox _activeTextBox;
+
         public ProgrammerWindow()
         {
             DataContext = this;
             InitializeComponent();
-            _fromBaseOperand = String.Empty;
+
+            _previousOperand = string.Empty;
+            _currentOperand = string.Empty;
+            _previousOperator = string.Empty;
+
+            _activeTextBox = TextBoxCalculation;
 
             this.KeyDown += MainWindow_KeyDown;
             this.Closing += ((System.Windows.Application.Current as App)).MainWindow_Closing;
-        }
-        private Button FindButtonByContent(string searchText)
-        {
-            return this.FindLogicalChildren<Button>()
-                       .FirstOrDefault(b => b.Content != null && b.Content.ToString().Equals(searchText));
-        }        
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+            TextBoxCalculation.GotFocus += TextBox_GotFocus;
+            TextBoxResult.GotFocus += TextBox_GotFocus;
+
+        }
+        private void About_Click(object sender, RoutedEventArgs e)
         {
-            Button? toFindButton = FindButtonByContent(e.Key.ToString());
-            if ((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) ||
-                (e.Key >= Key.A && e.Key <= Key.F) && toFindButton != null)
+            MessageBox.Show("Arustei Andrei, IA331");
+        }
+        private void TextBox_GotFocus(object sender,RoutedEventArgs e)
+        {
+            if(sender is TextBox tb)
             {
-                int numberPressed = (e.Key >= Key.D0 && e.Key <= Key.D9)
-                    ? e.Key - Key.D0
-                    : e.Key - Key.NumPad0;
-                if (numberPressed >= 0)
+                _activeTextBox = tb;
+            }
+        }
+
+        private Button FindButtonByContentRecursive(DependencyObject parent, string content)
+        {
+            // Loop through all the visual children of the current element.
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                // If the child is a button, check its content.
+                if (child is Button button && button.Content?.ToString() == content)
                 {
-                    ComputeAction(Convert.ToString(numberPressed));
+                    return button;
                 }
-                else
+
+                // If the child is a container, recurse into its children.
+                if (child is DependencyObject depChild)
                 {
-                    if (e.Key >= Key.A && e.Key <= Key.F)
+                    var foundButton = FindButtonByContentRecursive(depChild, content);
+                    if (foundButton != null)
                     {
-                        string letter = e.Key.ToString();
-                        ComputeAction(letter);
+                        return foundButton;
                     }
                 }
             }
 
+            return null;
+        }
+
+        public void Cut_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommandManager.Cut_Executed(sender,e,_activeTextBox,ref _clipboard);
+        }
+
+        public void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommandManager.Copy_Executed(sender,e,_activeTextBox,ref _clipboard);
+        }
+
+        public void Paste_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            CommandManager.Paste_Executed(sender,e, _activeTextBox,ref _clipboard);
+        }
+        public void Edit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = CommandManager.Edit_CanExecute(_activeTextBox);
+        }
+
+        public void Paste_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = CommandManager.Paste_CanExecute(_activeTextBox,ref _clipboard);
+        }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            Button toFindButton;
+
+            if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+            {
+                int numberPressed = (e.Key >= Key.D0 && e.Key <= Key.D9)
+                    ? e.Key - Key.D0
+                    : e.Key - Key.NumPad0;
+                toFindButton = FindButtonByContentRecursive(this,numberPressed.ToString());
+                if (toFindButton != null && toFindButton.IsEnabled)
+                { 
+                    ComputeAction(Convert.ToString(numberPressed));
+                }
+            }
+            else if ((e.Key >= Key.A && e.Key <= Key.F))
+            {
+                string letter = e.Key.ToString();
+                toFindButton = FindButtonByContentRecursive(this,letter);
+                if (toFindButton != null && toFindButton.IsEnabled)
+                { 
+                    ComputeAction(letter); 
+                }
+            }
 
             switch (e.Key)
             {
@@ -86,7 +157,7 @@ namespace HackerCalculator
                     ComputeAction(ButtonsContents.DictOperators[Operators.Equals]);
                     break;
                 case Key.Escape:
-                    ComputeAction(ButtonsContents.DictOtherOperations[OtherOperations.C]);
+                    ComputeAction(ButtonsContents.DictOtherOperations[OtherOperations.CE]);
                     break;
                 case Key.Multiply:
                     ComputeAction(ButtonsContents.DictOperators[Operators.Multiply]);
@@ -111,21 +182,6 @@ namespace HackerCalculator
             return match1.Success && match2.Success;
         }
 
-        private bool ValidateSideBySideDecimalSeparator(string lastCharacter, string penultimateCharacter)
-        {
-            return lastCharacter == "." && penultimateCharacter == ".";
-        }
-
-        private bool ValidateDivisionByZero(string lastCharacter, string penultimateCharacter)
-        {
-            return lastCharacter == "0" && (penultimateCharacter == "/" || penultimateCharacter == "%");
-        }
-
-        private bool ValidateNegativeSqrt(string sign)
-        {
-            return sign == "-";
-        }
-
         private bool ValidateInput(string lastCharacter, string penultimateCharacter, String content)
         {
             if (TextBoxCalculation.Text.Length >= 2)
@@ -135,19 +191,6 @@ namespace HackerCalculator
                     MessageBox.Show("Cannot insert two side by side operators!");
                     return false;
                 }
-
-                if (ValidateDivisionByZero(lastCharacter, penultimateCharacter))
-                {
-                    MessageBox.Show("Division by zero!");
-                    return false;
-                }
-
-                if (ValidateSideBySideDecimalSeparator(lastCharacter, penultimateCharacter))
-                {
-                    MessageBox.Show("Division by zero!");
-                    return false;
-                }
-
             }
             return true;
         }
@@ -172,28 +215,25 @@ namespace HackerCalculator
 
         private bool IsDelOption(String buttonContent)
         {
-            string pattern = @"(DEL|C)";
+            string pattern = @"(DEL|CE)";
             Match match = Regex.Match(buttonContent, pattern);
             return match.Success;
         }
 
         private void ComputeDEL()
         {
-            bool erased = false;
-            if (_fromBaseOperand != String.Empty)
-            {
-                _fromBaseOperand = _fromBaseOperand.Remove(_fromBaseOperand.Length - 1);
-                erased = true;
-            }
-            if (erased)
-                TextBoxCalculation.Text = TextBoxCalculation.Text.Remove(TextBoxCalculation.Text.Length - 1);
+            String calculation = TextBoxCalculation.Text;
+            ComputeCalculations.ComputeDEL(ref _previousOperand,ref _previousOperator,ref _currentOperand, ref calculation);
+            TextBoxCalculation.Text = calculation;
         }
 
-        private void ComputeC()
+        private void ComputeCE()
         {
-            TextBoxResult.Text = "0";
-            TextBoxCalculation.Text = String.Empty;
-            _fromBaseOperand = String.Empty;
+            String calculation = TextBoxCalculation.Text;
+            String result = TextBoxResult.Text;
+            ComputeCalculations.ComputeCE(_previousOperand,_previousOperator, ref _currentOperand, ref calculation, ref result);
+            TextBoxCalculation.Text= calculation;
+            TextBoxResult.Text= result;
         }
 
         private void ComputeDelOptions(String buttonContent)
@@ -203,22 +243,10 @@ namespace HackerCalculator
                 case "DEL":
                     ComputeDEL();
                     break;
-                case "C(Clear)":
-                    ComputeC();
+                case "CE":
+                    ComputeCE();
                     break;
             }
-        }
-
-        protected void UpdateDisplayWithGrouping()
-        {
-            string displayText = "";
-
-            if (_fromBaseOperand != String.Empty)
-            {
-                displayText += FormatNumberWithGrouping(_fromBaseOperand);
-            }
-
-            TextBoxCalculation.Text = displayText;
         }
 
         protected string FormatNumberWithGrouping(string numberStr)
@@ -256,39 +284,106 @@ namespace HackerCalculator
 
         protected void ComputeDigit(String buttonContent)
         {
-            _fromBaseOperand += buttonContent;
-            TextBoxCalculation.Text += buttonContent;
-
-            UpdateDisplayWithGrouping();
+            String calculation = TextBoxCalculation.Text;
+            ComputeCalculations.ComputeDigit(buttonContent, ref _previousOperand, ref _previousOperator, ref _currentOperand,
+                ref calculation, true);
+            TextBoxCalculation.Text = calculation;
         }
 
-        private String ConvertFromOperand()
+        private string FromBase10(String operand,int toBase)
         {
-            var dictBases = (DataContext as ButtonsProgrammerViewModel).DictBases;
-            String toBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedToBaseItem;
-            String fromBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedFromBaseItem;
-            int toBase = dictBases[toBaseString];
-            int fromBase = dictBases[fromBaseString];
 
-            int numberInDecimal = Convert.ToInt32(_fromBaseOperand,fromBase);
-            string numberInToBase = Convert.ToString(numberInDecimal, toBase).ToUpper();
+            int number = Convert.ToInt32(operand);
+            if (number == 0) return "0";
 
-            return numberInToBase;
+            string result = "";
+            while (number > 0)
+            {
+                int remainder = number % toBase;
+                result = (remainder < 10 ? remainder.ToString() : ((char)(remainder - 10 + 'A')).ToString()) + result;
+                number /= toBase;
+            }
+
+            return Convert.ToString(result);
+        }
+
+        private string ToBase10(String operand,int fromBase)
+        {
+
+            int result = 0;
+            int power = 0;
+
+            for (int i = operand.Length - 1; i >= 0; i--)
+            {
+                char digitChar = operand[i];
+                int digit = Char.IsDigit(digitChar) ? digitChar - '0' : Char.ToUpper(digitChar) - 'A' + 10;
+
+                if (digit >= fromBase)
+                {
+                    throw new ArgumentException($"Invalid digit {digitChar} for base {fromBase}");
+                }
+
+                result += digit * (int)Math.Pow(fromBase, power);
+                power++;
+            }
+
+            return Convert.ToString(result);
         }
 
         protected void ComputeEquals(String buttonContent)
         {
-            if (_fromBaseOperand != String.Empty)
-            {
-                TextBoxResult.Text = ConvertFromOperand();
-            }
+            String calculation = TextBoxCalculation.Text;
+            String result = TextBoxResult.Text;
+
+            var dictBases = (DataContext as ButtonsProgrammerViewModel).DictBases;
+            String fromBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedFromBaseItem;
+            String toBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedToBaseItem;
+            int toBase = dictBases[toBaseString];
+            int fromBase = dictBases[fromBaseString];
+            if (_previousOperand != String.Empty) 
+                _previousOperand = ToBase10(_previousOperand,fromBase);
+            if(_currentOperand != String.Empty)
+                _currentOperand = ToBase10(_currentOperand,fromBase);
+
+            ComputeCalculations.ComputeEquals(buttonContent, ref _previousOperand, ref _previousOperator, ref _currentOperand, ref result, ref calculation, false);
+            TextBoxCalculation.Text = FromBase10(calculation, fromBase);
+            TextBoxResult.Text = FromBase10(result,toBase);
+
+            _previousOperand = FromBase10(calculation, fromBase);
         }
         protected void ComputeDecimalSeparator(string separator)
         {
-            TextBoxCalculation.Text += separator;
-            if (_fromBaseOperand != String.Empty)
-                _fromBaseOperand += separator;
+            String calculation = TextBoxCalculation.Text;
+            ComputeCalculations.ComputeDecimalSeparator(separator, ref _previousOperand, ref _currentOperand, ref calculation);
+            TextBoxCalculation.Text = calculation;
         }
+
+        private bool IsBinaryOperator(String content)
+        {
+            return "+-*".Contains(content);
+        }
+
+        private void ComputeBinaryOperator(String content)
+        {
+            String calculation = TextBoxCalculation.Text;
+            String result = TextBoxResult.Text;
+
+            if (_currentOperand!= String.Empty)
+            { 
+                ComputeEquals("=");
+                TextBoxCalculation.Text += content;
+                _previousOperator = content;
+            }
+            else
+            {
+                ComputeCalculations.ComputeBinaryOperator(content, ref _previousOperand, ref _previousOperator,
+                    ref _currentOperand, ref calculation, ref result);
+                TextBoxCalculation.Text = calculation;
+                TextBoxResult.Text = result;
+            }
+            
+        }
+
         private void ComputeAction(String content)
         {
             if (TextBoxCalculation.Text.Length >= 1)
@@ -300,6 +395,8 @@ namespace HackerCalculator
                         ComputeDigit(content);
                     else if (IsDecimalSeparator(content))
                         ComputeDecimalSeparator(content);
+                    else if (IsBinaryOperator(content))
+                        ComputeBinaryOperator(content);
                     else if (IsSingularOperator(content))
                         ComputeSingularOperator(content);
                     else if (IsEquals(content))
@@ -316,20 +413,9 @@ namespace HackerCalculator
 
         protected void ComputeSingularOperator(String buttonContent)
         {
-            double result = 0.0;
-            if (_fromBaseOperand != String.Empty)
-            {
-                result = ComputeSingularOperatorExpression(_fromBaseOperand, buttonContent);
-            }
-
-            string finalResult;
-
-            if (Math.Floor(result) == result)
-                finalResult = Convert.ToString(Convert.ToInt32(result));
-            else
-                finalResult = Convert.ToString(result);
-
-            TextBoxCalculation.Text = _fromBaseOperand;
+            String calculation = TextBoxCalculation.Text;
+            ComputeCalculations.ComputeSingularOperator(buttonContent,ref _currentOperand,ref _previousOperand, _previousOperator,ref calculation);
+            TextBoxCalculation.Text = calculation;
         }
         private bool IsSingularOperator(string buttonContent)
         {
@@ -353,10 +439,15 @@ namespace HackerCalculator
 
         private void ChangeWindow_Click(object sender, RoutedEventArgs e)
         {
+            double currentWindowLeft = this.Left;
+            double currentWindowTop = this.Top;
             StandardWindow mainWindow = new StandardWindow();
+            mainWindow.Left = currentWindowLeft;
+            mainWindow.Top = currentWindowTop;
             mainWindow.Show();
 
             this.Close();
         }
+
     }
 }

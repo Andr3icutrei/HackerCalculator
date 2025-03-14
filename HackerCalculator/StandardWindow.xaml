@@ -10,6 +10,12 @@
         <local:ButtonsStandardViewModel/>
     </Window.DataContext>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="Cut" Executed="Cut_Executed" CanExecute="Edit_CanExecute"/>
+        <CommandBinding Command="Copy" Executed="Copy_Executed" CanExecute="Edit_CanExecute"/>
+        <CommandBinding Command="Paste" Executed="Paste_Executed" CanExecute="Paste_CanExecute"/>
+    </Window.CommandBindings>
+
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="4" />
@@ -23,140 +29,146 @@
             <Setter Property="Foreground" Value="#FF20C20E" />
             <Setter Property="BorderBrush" Value="#FF20C20E" />
         </Style>
-
-
     </Window.Resources>
 
-    <Grid Background="Black">
-        <Grid VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <DockPanel Background="Black">
+        <Menu DockPanel.Dock="Top" Background="Black" Foreground="#FF20C20E" BorderBrush="#FF20C20E" BorderThickness="1">
+            <MenuItem Header="File" Foreground="#FF20C20E">
+                <MenuItem Header="Cut" Command="Cut" Foreground="#FF20C20E"/>
+                <MenuItem Header="Copy" Command="Copy" Foreground="#FF20C20E"/>
+                <MenuItem Header="Paste" Command="Paste" Foreground="#FF20C20E"/>
+            </MenuItem>
+            <MenuItem Header="Help" Foreground="#FF20C20E">
+                <MenuItem Header="About me" Click="About_Click" Foreground="#FF20C20E"/>
+            </MenuItem>
+            <MenuItem Header="Switch to Programmer" Click="ChangeWindow_Click" Foreground="#FF20C20E"/>
+        </Menu>
 
-            <Button Content="MC" Grid.Column="0" Margin="5" Click="ButtonMC_Click"/>
-            <Button Content="MR" Grid.Column="1" Margin="5" Click="ButtonMR_Click"/>
-            <Button Content="M+" Grid.Column="2" Margin="5" Click="ButtonMAdd_Click"/>
-            <Button Content="M-" Grid.Column="3" Margin="5" Click="ButtonMSubstract_Click"/>
-            <Button Content="MS" Grid.Column="4" Margin="5" Click="ButtonMS_Click"/>
-            <ComboBox ItemsSource="{Binding MemoryResults}" 
-                      SelectedItem="{Binding SelectedResult, Mode=TwoWay}" 
-                      Grid.Column="5" Margin="5" 
-                      Text="M" 
-                      Foreground="#FF20C20E" 
-                      Background="Black" 
-                      BorderBrush="#FF20C20E" 
-                      FontSize="20" 
-                      IsEditable="True" 
-                      IsReadOnly="True">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FF20C20E" Background="Black">
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+        <Grid>
+            <Grid VerticalAlignment="Top" Margin="0,200,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="MC" Grid.Column="0" Margin="5" Click="ButtonMC_Click"/>
+                <Button Content="MR" Grid.Column="1" Margin="5" Click="ButtonMR_Click"/>
+                <Button Content="M+" Grid.Column="2" Margin="5" Click="ButtonMAdd_Click"/>
+                <Button Content="M-" Grid.Column="3" Margin="5" Click="ButtonMSubstract_Click"/>
+                <Button Content="MS" Grid.Column="4" Margin="5" Click="ButtonMS_Click"/>
+                <ComboBox ItemsSource="{Binding MemoryResults}" 
+                  SelectedItem="{Binding SelectedResult, Mode=TwoWay}" 
+                  Grid.Column="5" Margin="5" 
+                  Text="M" 
+                  Foreground="#FF20C20E" 
+                  Background="Black" 
+                  BorderBrush="#FF20C20E" 
+                  FontSize="20" 
+                  IsEditable="True" 
+                  IsReadOnly="True">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Foreground="#FF20C20E" Background="Black">
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
+            <Grid Margin="0,243,0,0">
+                <ItemsControl Name="MatrixButtons" ItemsSource="{Binding ButtonsContent}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                        </Grid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{Binding}" 
+                                    Click="Button_Click"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                                <ItemsControl.AlternationCount>4</ItemsControl.AlternationCount>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                    <ItemsControl.AlternationCount>6</ItemsControl.AlternationCount>
+                </ItemsControl>
+            </Grid>
+
+            <Grid Margin="5,19,186,437">
+
+
+                <CheckBox Name="CheckBoxDigitGrouping"
+
+                        Checked="CheckBoxDigitGrouping_Check"
+                        Content="Digit Grouping"
+                        Foreground="#FF20C20E"
+                        HorizontalAlignment="Center"
+                        Margin="0,2,0,2" Width="127"/>
+            </Grid>
+
+
+            <Grid Margin="5,120,5,299">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+                <TextBox Name="TextBoxResult" Grid.Row="1" Background="Black" FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" 
+             TextAlignment="Right" Text="Result: " IsReadOnly="True"/>
+                <TextBox Name="TextBoxCalculation" Background="Black"
+             FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" TextAlignment="Right" IsReadOnly="True" Height="40" VerticalAlignment="Top"/>
+            </Grid>
+
+
         </Grid>
-
-        <Grid Margin="0,291,0,0">
-            <ItemsControl Name="MatrixButtons" ItemsSource="{Binding ButtonsContent}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ItemsControl ItemsSource="{Binding}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                    </Grid>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemContainerStyle>
-                                <Style TargetType="ContentPresenter">
-                                    <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
-                                </Style>
-                            </ItemsControl.ItemContainerStyle>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding}" 
-                                            Click="Button_Click"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-
-                            <ItemsControl.AlternationCount>4</ItemsControl.AlternationCount>
-                        </ItemsControl>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ContentPresenter">
-                        <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-
-                <ItemsControl.AlternationCount>6</ItemsControl.AlternationCount>
-            </ItemsControl>
-        </Grid>
-
-        <Grid Margin="10,10,162,418">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Change &#xD;&#xA;to Programmer" 
-                    Click="ChangeWindow_Click" Margin="4,4,4,10"/>
-        </Grid>
-
-        <Grid Margin="0,157,0,273">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="166*"/>
-                <ColumnDefinition Width="52*"/>
-                <ColumnDefinition Width="119*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-
-            </Grid.RowDefinitions>
-            <TextBox Name="TextBoxResult" Grid.Row="1" Background="Black" Margin="4,1,4,4" FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" 
-                     TextAlignment="Right" Text="Result: " IsReadOnly="True"/>
-            <TextBox Name="TextBoxCalculation" Margin="4,-2,4,0" Background="Black"
-                     FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" Grid.ColumnSpan="3" TextAlignment="Right" IsReadOnly="True" Height="40" VerticalAlignment="Top"/>
-        </Grid>
-
-        <CheckBox Name="CheckBoxDigitGrouping" 
-             Checked="CheckBoxDigitGrouping_Check"
-             Content="Digit Grouping" 
-             Foreground="#FF20C20E" 
-             HorizontalAlignment="Left" 
-             Margin="222,10,0,0" 
-             VerticalAlignment="Top"/>
-    </Grid>
+    </DockPanel>
 </Window>

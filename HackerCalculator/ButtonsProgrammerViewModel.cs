@@ -19,6 +19,7 @@ namespace HackerCalculator
         public Dictionary<String,int> DictBases { get; set; }
 
         public ObservableCollection<ObservableCollection<ButtonData>> ButtonsData { get; set; }
+        public ObservableCollection<ObservableCollection<ButtonData>> OperatorsData { get; set;}
         public List<List<String>> ButtonText { get; set; }
         public bool[,] ButtonEnabledMatrix { get; set; }
 
@@ -86,7 +87,7 @@ namespace HackerCalculator
             ButtonEnabledMatrix = FillDataStructures.FillEnabledDecimalMatrix();
             SelectedFromBaseItem = "Decimal";
             SelectedToBaseItem = "Decimal";
-
+            OperatorsData = FillDataStructures.FillOperatorsDataProgrammer();
             ButtonsData = FillDataStructures.FillButtonsDataProgrammer(ButtonEnabledMatrix, ButtonText);
 
             BaseItems = new ObservableCollection<String>

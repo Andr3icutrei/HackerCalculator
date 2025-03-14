@@ -213,6 +213,25 @@ namespace HackerCalculator
             return buttonDatas;
         }
 
+        public static ObservableCollection<ObservableCollection<ButtonData>> FillOperatorsDataProgrammer()
+        {
+            ObservableCollection<ObservableCollection<ButtonData>> operatorsDatas =
+                new ObservableCollection<ObservableCollection<ButtonData>>();
+
+            ObservableCollection<ButtonData> rowButtons1 = new ObservableCollection<ButtonData>();
+            rowButtons1.Add(new ButtonData { Content = "+", IsEnabled = true });
+
+            ObservableCollection<ButtonData> rowButtons2 = new ObservableCollection<ButtonData>();
+            rowButtons2.Add(new ButtonData { Content= "-", IsEnabled = true });
+
+            ObservableCollection<ButtonData> rowButton3 = new ObservableCollection<ButtonData>();
+            rowButton3.Add(new ButtonData { Content="*",IsEnabled = true});
+            operatorsDatas.Add(rowButtons1);
+            operatorsDatas.Add(rowButtons2);
+            operatorsDatas.Add(rowButton3);
+
+            return operatorsDatas;
+        }
         public static List<List<String>> FillButtonsContentStandard(int rows, int columns)
         {
             List<List<String>> contents = new List<List<string>>();
