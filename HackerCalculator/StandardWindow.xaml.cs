@@ -320,7 +320,7 @@ namespace HackerCalculator
                             ref calculation);
                     else if (IsBinaryOperator(content))
                         ComputeCalculations.ComputeBinaryOperator(content, ref _previousOperand, ref _previousOperator, ref _currentOperand,
-                            ref calculation, ref result);
+                            ref calculation, ref result,(bool)CheckBoxDigitGrouping.IsChecked);
                     else if (IsEquals(content))
                         ComputeCalculations.ComputeEquals(content, ref _previousOperand, ref _previousOperator, ref _currentOperand,
                             ref result, ref calculation, (bool)CheckBoxDigitGrouping.IsChecked);

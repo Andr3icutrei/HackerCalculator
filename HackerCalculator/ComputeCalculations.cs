@@ -129,12 +129,14 @@ namespace HackerCalculator
             }
             calculation += buttonContent;
 
-            if (isDigitGroupingChecked == true)
-                UpdateDisplayWithGrouping(previousOperand,previousOperator,currentOperand,ref calculation);
+            if (isDigitGroupingChecked)
+            { 
+                UpdateDisplayWithGrouping(previousOperand, previousOperator, currentOperand, ref calculation);
+            }
         }
 
         public static void ComputeBinaryOperator(String buttonContent,ref String previousOperand, ref String previousOperator,
-            ref String currentOperand,ref String calculation,ref String result)
+            ref String currentOperand,ref String calculation,ref String result,bool isDigitGroupingChecked)
         {
             if (previousOperator == String.Empty)
             {
@@ -168,13 +170,36 @@ namespace HackerCalculator
                         MessageBox.Show("error computing");
                         break;
                 }
-                if (Math.Floor(resultCalculation) != resultCalculation)
-                    result = Convert.ToString(resultCalculation);
-                else
-                    result = Convert.ToString(Convert.ToInt32(resultCalculation));
+
+                try
+                {
+                    if (Math.Floor(resultCalculation) != resultCalculation)
+                        result = Convert.ToString(resultCalculation);
+                    else
+                        result = Convert.ToString(Convert.ToInt64(resultCalculation));
+                }
+                catch (OverflowException e)
+                {
+                    previousOperand = previousOperator = currentOperand = calculation = result = String.Empty;
+                    MessageBox.Show("Given calculation resulted into too big of a number!");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error:");
+                    return;
+                }
+
                 previousOperand = Convert.ToString(result);
+                if (isDigitGroupingChecked)
+                { 
+                    previousOperand = FormatNumberWithGrouping(previousOperand);
+                    result = FormatNumberWithGrouping(result);
+                }
+
                 currentOperand = String.Empty;
                 previousOperator = buttonContent;
+                
                 calculation = previousOperand + previousOperator;
             }
         }
@@ -242,13 +267,17 @@ namespace HackerCalculator
             }
             else
             {
-                ComputeBinaryOperator(buttonContent,ref previousOperand,ref previousOperator,ref currentOperand,ref calculation,ref result);
+                ComputeBinaryOperator(buttonContent,ref previousOperand,ref previousOperator,ref currentOperand,ref calculation,ref result,isDigitGroupingChecked);
                 previousOperator = String.Empty;
-                calculation = calculation.Substring(0, calculation.Length - 1);
+                if(calculation.Length >=1)
+                    calculation = calculation.Substring(0, calculation.Length - 1);
             }
 
             if (isDigitGroupingChecked)
-                UpdateDisplayWithGrouping(previousOperand, previousOperator, currentOperand,ref calculation);
+            { 
+                UpdateDisplayWithGrouping(previousOperand, previousOperator, currentOperand, ref calculation);
+                result = FormatNumberWithGrouping(result);
+            }
         }
         public static void ComputeDecimalSeparator(string separator,ref String previousOperand,ref String currentOperand,ref String calculation)
         {

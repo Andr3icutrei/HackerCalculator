@@ -144,7 +144,6 @@
 
 
                 <CheckBox Name="CheckBoxDigitGrouping"
-
                         Checked="CheckBoxDigitGrouping_Check"
                         Content="Digit Grouping"
                         Foreground="#FF20C20E"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -286,70 +287,138 @@ namespace HackerCalculator
         {
             String calculation = TextBoxCalculation.Text;
             ComputeCalculations.ComputeDigit(buttonContent, ref _previousOperand, ref _previousOperator, ref _currentOperand,
-                ref calculation, true);
+                ref calculation, false);
             TextBoxCalculation.Text = calculation;
-        }
-
-        private string FromBase10(String operand,int toBase)
-        {
-
-            int number = Convert.ToInt32(operand);
-            if (number == 0) return "0";
-
-            string result = "";
-            while (number > 0)
-            {
-                int remainder = number % toBase;
-                result = (remainder < 10 ? remainder.ToString() : ((char)(remainder - 10 + 'A')).ToString()) + result;
-                number /= toBase;
-            }
-
-            return Convert.ToString(result);
-        }
-
-        private string ToBase10(String operand,int fromBase)
-        {
-
-            int result = 0;
-            int power = 0;
-
-            for (int i = operand.Length - 1; i >= 0; i--)
-            {
-                char digitChar = operand[i];
-                int digit = Char.IsDigit(digitChar) ? digitChar - '0' : Char.ToUpper(digitChar) - 'A' + 10;
-
-                if (digit >= fromBase)
-                {
-                    throw new ArgumentException($"Invalid digit {digitChar} for base {fromBase}");
-                }
-
-                result += digit * (int)Math.Pow(fromBase, power);
-                power++;
-            }
-
-            return Convert.ToString(result);
         }
 
         protected void ComputeEquals(String buttonContent)
         {
-            String calculation = TextBoxCalculation.Text;
-            String result = TextBoxResult.Text;
+            try
+            {
+                String calculation = TextBoxCalculation.Text;
+                String result = TextBoxResult.Text;
+                var dictBases = (DataContext as ButtonsProgrammerViewModel).DictBases;
+                String fromBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedFromBaseItem;
+                String toBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedToBaseItem;
+                int toBase = dictBases[toBaseString];
+                int fromBase = dictBases[fromBaseString];
 
-            var dictBases = (DataContext as ButtonsProgrammerViewModel).DictBases;
-            String fromBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedFromBaseItem;
-            String toBaseString = (DataContext as ButtonsProgrammerViewModel).SelectedToBaseItem;
-            int toBase = dictBases[toBaseString];
-            int fromBase = dictBases[fromBaseString];
-            if (_previousOperand != String.Empty) 
-                _previousOperand = ToBase10(_previousOperand,fromBase);
-            if(_currentOperand != String.Empty)
-                _currentOperand = ToBase10(_currentOperand,fromBase);
+                // Convert operands to base 10 without changing the original values
+                string decimalPrevOperand = !string.IsNullOrEmpty(_previousOperand) ?
+                    ToBase10(_previousOperand, fromBase) : string.Empty;
 
-            ComputeCalculations.ComputeEquals(buttonContent, ref _previousOperand, ref _previousOperator, ref _currentOperand, ref result, ref calculation, false);
-            TextBoxCalculation.Text = FromBase10(calculation, fromBase);
-            TextBoxResult.Text = FromBase10(result,toBase);
+                string decimalCurrOperand = !string.IsNullOrEmpty(_currentOperand) ?
+                    ToBase10(_currentOperand, fromBase) : string.Empty;
 
-            _previousOperand = FromBase10(calculation, fromBase);
+                // Keep original values for display purposes
+                string originalPrevOperand = _previousOperand;
+
+                // Perform calculation in base 10
+                string decimalResult = result;
+                string decimalCalculation = calculation;
+
+                // Make copies of the variables to pass to ComputeEquals
+                string tempPrevOperand = decimalPrevOperand;
+                string tempOperator = _previousOperator;
+                string tempCurrOperand = decimalCurrOperand;
+
+                // Call compute with decimal values
+                ComputeCalculations.ComputeEquals(
+                    buttonContent,
+                    ref tempPrevOperand,
+                    ref tempOperator,
+                    ref tempCurrOperand,
+                    ref decimalResult,
+                    ref decimalCalculation,
+                    false
+                );
+
+                // Update operator for next calculation
+                _previousOperator = tempOperator;
+
+                // Convert result back to target base
+                string displayResult = FromBase10(decimalResult, toBase);
+
+                // Update the display
+                TextBoxResult.Text = displayResult;
+
+                if (!string.IsNullOrEmpty(_currentOperand))
+                {
+                    string displayCalculation = FromBase10(decimalCalculation, fromBase);
+                    TextBoxCalculation.Text = displayCalculation;
+                    _previousOperand = displayCalculation;
+                    _currentOperand = String.Empty;
+                }
+                else if (!string.IsNullOrEmpty(tempPrevOperand))
+                {
+                    TextBoxCalculation.Text = originalPrevOperand;
+                    _previousOperand = originalPrevOperand;
+                }
+            }
+            catch (Exception ex)
+            {
+                TextBoxResult.Text = "Error: " + ex.Message;
+            }
+        }
+
+        // Improved conversion methods
+        private string ToBase10(string operand, int fromBase)
+        {
+            if (string.IsNullOrEmpty(operand))
+                return "0";
+
+            // Handle negative numbers
+            bool isNegative = operand.StartsWith("-");
+            if (isNegative)
+                operand = operand.Substring(1);
+
+            // Convert digit by digit
+            long result = 0;
+            foreach (char c in operand)
+            {
+                int digit;
+                if (char.IsDigit(c))
+                    digit = c - '0';
+                else
+                    digit = char.ToUpper(c) - 'A' + 10;
+
+                if (digit >= fromBase)
+                    throw new ArgumentException($"Invalid digit '{c}' for base {fromBase}");
+
+                result = result * fromBase + digit;
+            }
+
+            return (isNegative ? "-" : "") + result.ToString();
+        }
+
+        private string FromBase10(string decimalStr, int toBase)
+        {
+            // Parse the decimal string to a number
+            if (!long.TryParse(decimalStr, out long number))
+                return "0"; // Fallback or handle error as needed
+
+            // Handle zero separately
+            if (number == 0)
+                return "0";
+
+            // Handle negative numbers
+            bool isNegative = number < 0;
+            if (isNegative)
+                number = -number;
+
+            // Convert to target base
+            string result = "";
+            while (number > 0)
+            {
+                int remainder = (int)(number % toBase);
+                char digit = remainder < 10 ?
+                    (char)(remainder + '0') :
+                    (char)(remainder - 10 + 'A');
+                result = digit + result;
+                number /= toBase;
+            }
+
+            return isNegative ? "-" + result : result;
         }
         protected void ComputeDecimalSeparator(string separator)
         {
@@ -357,6 +426,8 @@ namespace HackerCalculator
             ComputeCalculations.ComputeDecimalSeparator(separator, ref _previousOperand, ref _currentOperand, ref calculation);
             TextBoxCalculation.Text = calculation;
         }
+
+
 
         private bool IsBinaryOperator(String content)
         {
@@ -377,7 +448,7 @@ namespace HackerCalculator
             else
             {
                 ComputeCalculations.ComputeBinaryOperator(content, ref _previousOperand, ref _previousOperator,
-                    ref _currentOperand, ref calculation, ref result);
+                    ref _currentOperand, ref calculation, ref result,false);
                 TextBoxCalculation.Text = calculation;
                 TextBoxResult.Text = result;
             }
@@ -407,7 +478,8 @@ namespace HackerCalculator
             }
             else
             {
-                ComputeDigit(content);
+                if(IsDigit(content))
+                    ComputeDigit(content);
             }
         }
 
@@ -449,5 +521,16 @@ namespace HackerCalculator
             this.Close();
         }
 
+        private string ConvertBase(string number,int fromBase,int toBase)
+        {
+            string decimalValue = ToBase10(number, fromBase); // Convert to base 10
+            return FromBase10(decimalValue, toBase); // Convert from base 10 to target base
+        }
+
+        private void listBoxFromBase_Changed(object sender, RoutedEventArgs e)
+        {
+            if(TextBoxCalculation!=null)
+                _previousOperand = _previousOperator = _currentOperand = TextBoxCalculation.Text = String.Empty;
+        }
     }
 }

@@ -41,7 +41,7 @@
             <MenuItem Header="Help" Foreground="#FF20C20E">
                 <MenuItem Header="About me" Click="About_Click"  Foreground="#FF20C20E"/>
             </MenuItem>
-            <MenuItem Header="Switch to Programmer" Click="ChangeWindow_Click" Foreground="#FF20C20E"/>
+            <MenuItem Header="Switch to Standard" Click="ChangeWindow_Click" Foreground="#FF20C20E"/>
         </Menu>
 
         <Grid>
@@ -68,7 +68,8 @@
                             ItemsSource="{Binding BaseItems}" 
                             SelectedItem="{Binding SelectedFromBaseItem, Mode=TwoWay}"
                             Background="Black" Foreground="#FF20C20E"
-                            BorderThickness="0">
+                            BorderThickness="0"
+                            SelectionChanged="listBoxFromBase_Changed">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Template">
