@@ -11,42 +11,64 @@ namespace HackerCalculator
 {
     public static class CommandManager
     {
-        public static void Cut_Executed(object sender, ExecutedRoutedEventArgs e,TextBox activeTextBox,ref String clipboard)
+        public static void Cut_Executed(object sender, ExecutedRoutedEventArgs e,ref String activeTextBox,
+            ref String previousOperand,String previousOperator, ref String currentOperand,ref String clipboard)
         {
-            if (activeTextBox != null && activeTextBox.SelectionLength > 0)
+            if (activeTextBox != null)
             {
-                clipboard = activeTextBox.SelectedText;
-
-                int selectionStart = activeTextBox.SelectionStart;
-                activeTextBox.Text = activeTextBox.Text.Remove(selectionStart, activeTextBox.SelectionLength);
-                activeTextBox.SelectionStart = selectionStart;
+                if(currentOperand != String.Empty)
+                {
+                    clipboard = currentOperand;
+                    currentOperand = String.Empty;
+                    activeTextBox = previousOperand + previousOperator;
+                }
+                else if(previousOperator ==String.Empty && previousOperand !=String.Empty)
+                {
+                    clipboard = previousOperand;
+                    previousOperand = String.Empty;
+                    activeTextBox = String.Empty;
+                }
             }
         }
 
-        public static void Copy_Executed(object sender, ExecutedRoutedEventArgs e, TextBox activeTextBox, ref String clipboard)
+        public static void Copy_Executed(object sender, ExecutedRoutedEventArgs e,ref String activeTextBox,
+            ref String previousOperand, String previousOperator, ref String currentOperand, ref String clipboard)
         {
-            if (activeTextBox != null && activeTextBox.SelectionLength > 0)
+            if (activeTextBox != null)
             {
-                clipboard = activeTextBox.SelectedText;
+                if (currentOperand != String.Empty)
+                {
+                    clipboard = currentOperand;
+                    currentOperand = String.Empty;
+                }
+                else if (previousOperator == String.Empty && previousOperand != String.Empty)
+                {
+                    clipboard = previousOperand;
+                    previousOperand = String.Empty;
+                }
             }
         }
 
-        public static void Paste_Executed(object sender, ExecutedRoutedEventArgs e,TextBox activeTextBox, ref String clipboard)
+        public static void Paste_Executed(object sender, ExecutedRoutedEventArgs e,ref String activeTextBox,
+            ref String previousOperand, String previousOperator, ref String currentOperand, ref String clipboard)
         {
             if (!string.IsNullOrEmpty(clipboard) && activeTextBox != null)
             {
-                int selectionStart = activeTextBox.SelectionStart;
-                int selectionLength = activeTextBox.SelectionLength;
-
-                activeTextBox.Text = activeTextBox.Text.Remove(selectionStart, selectionLength)
-                .Insert(selectionStart, clipboard);
-
-                activeTextBox.SelectionStart = selectionStart + clipboard.Length;
+                if (currentOperand == String.Empty && previousOperator != String.Empty)
+                {
+                    currentOperand = clipboard;
+                    activeTextBox = previousOperand + previousOperator + currentOperand;
+                }
+                else if(previousOperand == String.Empty)
+                {
+                    previousOperand = clipboard;
+                    activeTextBox = previousOperand;
+                }
             }
         }
         public static bool Edit_CanExecute( TextBox activeTextBox)
         {
-            return activeTextBox != null && activeTextBox.SelectionLength > 0;
+            return activeTextBox != null;
         }
 
         public static bool Paste_CanExecute(TextBox activeTextBox, ref String clipboard)

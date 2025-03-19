@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HackerCalculator"
         mc:Ignorable="d"
-        Title="ProgrammerMode" Height="535" Width="336">
+        Title="ProgrammerMode" Height="535" Width="336"
+        Background="Transparent"
+        BorderThickness="1"
+        BorderBrush="#FF20C20E" >
     <Window.DataContext>
         <local:ButtonsProgrammerViewModel/>
     </Window.DataContext>
@@ -20,242 +23,365 @@
         <Style TargetType="Button">
             <Setter Property="Margin" Value="4" />
             <Setter Property="Foreground" Value="#FF20C20E" />
-            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="BorderBrush" Value="#FF20C20E" />
             <Setter Property="Background" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF092E0A" />
+                                <Setter Property="BorderBrush" Value="#FF35FF17" />
+                                <Setter Property="Foreground" Value="#FF35FF17" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF104210" />
+                                <Setter Property="BorderBrush" Value="#FF7CFF69" />
+                                <Setter Property="Foreground" Value="#FF7CFF69" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-        <Style TargetType="TextBox" x:Key="ComboBoxTextBoxStyle">
+
+        <Style TargetType="TextBox">
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="#FF20C20E" />
             <Setter Property="BorderBrush" Value="#FF20C20E" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Foreground" Value="#FF20C20E" />
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="BorderBrush" Value="#FF20C20E" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF092E0A" />
+                    <Setter Property="Foreground" Value="#FF35FF17" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FF35FF17" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="0,5,5,5" />
+        </Style>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#FF20C20E" />
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="BorderBrush" Value="#FF20C20E" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="Padding" Value="5,3" />
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#FF35FF17" />
+                    <Setter Property="Foreground" Value="#FF35FF17" />
+                    <Setter Property="BorderBrush" Value="#FF35FF17" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF092E0A" />
+                    <Setter Property="Foreground" Value="#FF35FF17" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Foreground" Value="#FF20C20E" />
+            <Setter Property="BorderBrush" Value="#FF20C20E" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Consolas" />
         </Style>
     </Window.Resources>
 
-    <DockPanel Background="Black">
-        <Menu DockPanel.Dock="Top" Background="Black" Foreground="#FF20C20E" BorderBrush="#FF20C20E" BorderThickness="1">
-            <MenuItem Header="File" Foreground="#FF20C20E">
-                <MenuItem Header="Cut" Command="Cut" Foreground="#FF20C20E"/>
-                <MenuItem Header="Copy" Command="Copy" Foreground="#FF20C20E"/>
-                <MenuItem Header="Paste" Command="Paste" Foreground="#FF20C20E"/>
-            </MenuItem>
-            <MenuItem Header="Help" Foreground="#FF20C20E">
-                <MenuItem Header="About me" Click="About_Click"  Foreground="#FF20C20E"/>
-            </MenuItem>
-            <MenuItem Header="Switch to Standard" Click="ChangeWindow_Click" Foreground="#FF20C20E"/>
-        </Menu>
-
+    <Border Background="Black" BorderBrush="#FF20C20E" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="0" Background="#FF092E0A">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" Margin="10,10,5,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="From base:" Foreground="#FF20C20E"/>
-                    <ListBox Grid.Row="1" x:Name="listBoxFromBase" 
-                            ItemsSource="{Binding BaseItems}" 
-                            SelectedItem="{Binding SelectedFromBaseItem, Mode=TwoWay}"
-                            Background="Black" Foreground="#FF20C20E"
-                            BorderThickness="0"
-                            SelectionChanged="listBoxFromBase_Changed">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListBoxItem">
-                                            <RadioButton Content="{Binding}"
-                                            GroupName="FromBaseGroup"
-                                            Foreground="#FF20C20E"
-                                            Margin="2,2,2,2" 
-                                            BorderBrush="#FF20C20E" 
-                                            BorderThickness="1"
-                                            IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </Grid>
+                <TextBlock Text="[ HackerCalc v1.0 - PROGRAMMER ]" Foreground="#FF35FF17" Margin="10,5" FontFamily="Consolas" FontWeight="Bold"/>
 
-                <Grid Grid.Column="1" Margin="5,10,10,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="To base:" Foreground="#FF20C20E"/>
-                    <ListBox Grid.Row="1" x:Name="listBoxToBase"  
-                            ItemsSource="{Binding BaseItems}" 
-                            SelectedItem="{Binding SelectedToBaseItem, Mode=TwoWay}"
-                            Background="Black" Foreground="#FF20C20E"
-                            BorderThickness="0">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListBoxItem">
-                                            <RadioButton Content="{Binding}"
-                                            GroupName="ToBaseGroup"
-                                            Foreground="#FF20C20E"
-                                            Margin="2,2,2,2" 
-                                            BorderBrush="#FF20C20E" 
-                                            BorderThickness="1"
-                                            IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </Grid>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="_" Width="30" Height="25" FontSize="14" Margin="2,2,2,2" Click="MinimizeButton_Click"/>
+                    <Button Content="×" Width="30" Height="25" FontSize="14" Margin="2,2,2,2" Click="CloseButton_Click"/>
+                </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="2" Margin="10,10,10,10">
+            <DockPanel Grid.Row="1">
+                <Menu DockPanel.Dock="Top" Background="Black" Foreground="#FF20C20E" BorderBrush="#FF20C20E" BorderThickness="0,0,0,1">
+                    <MenuItem Header="[_File]">
+                        <MenuItem Header="Cut" Command="Cut" InputGestureText="Ctrl+X"/>
+                        <MenuItem Header="Copy" Command="Copy" InputGestureText="Ctrl+C"/>
+                        <MenuItem Header="Paste" Command="Paste" InputGestureText="Ctrl+V"/>
+                    </MenuItem>
+                    <MenuItem Header="[_Mode]">
+                        <MenuItem Header="Switch to Standard" Click="ChangeWindow_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="[_Help]">
+                        <MenuItem Header="About" Click="About_Click"/>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Name="TextBoxCalculation" 
-                        Background="Black" Margin="4"
-                        FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" 
-                        TextAlignment="Right" IsReadOnly="True" 
-                        Height="40"/>
-                <TextBox Grid.Row="1" Name="TextBoxResult" 
-                        Background="Black" Margin="4"
-                        FontSize="20" Foreground="#FF20C20E" BorderBrush="#FF20C20E" 
-                        TextAlignment="Right" Text="Result: " IsReadOnly="True"
-                        Height="40"/>
-            </Grid>
 
-            <Grid Grid.Row="2" Margin="10,106,10,10" Grid.RowSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" BorderBrush="#FF20C20E" BorderThickness="1" Margin="5" Padding="5" CornerRadius="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                <ItemsControl Grid.Column="0" Name="MatrixButtons" ItemsSource="{Binding ButtonsData}" HorizontalAlignment="Left" Width="250">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                        </Grid>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-
-                                <ItemsControl.ItemContainerStyle>
-                                    <Style TargetType="ContentPresenter">
-                                        <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                        <Grid Grid.Column="0" Margin="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="[ FROM BASE ]" Foreground="#FF35FF17"/>
+                            <ListBox Grid.Row="1" x:Name="listBoxFromBase" 
+                                    ItemsSource="{Binding BaseItems}" 
+                                    SelectedItem="{Binding SelectedFromBaseItem, Mode=TwoWay}"
+                                    Background="Black" Foreground="#FF20C20E"
+                                    BorderThickness="0"
+                                    SelectionChanged="listBoxFromBase_Changed">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <RadioButton Content="{Binding}"
+                                                    GroupName="FromBaseGroup"
+                                                    Foreground="#FF20C20E"
+                                                    Margin="2,2,2,2" 
+                                                    BorderBrush="#FF20C20E" 
+                                                    BorderThickness="1"
+                                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
                                     </Style>
-                                </ItemsControl.ItemContainerStyle>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </Grid>
 
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
-                                                Click="Button_Click"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-
-                                <ItemsControl.AlternationCount>4</ItemsControl.AlternationCount>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                            </Grid>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-
-                    <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
-                </ItemsControl>
-
-                <ItemsControl Name="OperatorsButtons" ItemsSource="{Binding OperatorsData}" Margin="5,0,-62,0" Grid.Column="1">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                        </Grid>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-
-                                <ItemsControl.ItemContainerStyle>
-                                    <Style TargetType="ContentPresenter">
-                                        <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                        <Grid Grid.Column="1" Margin="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="[ TO BASE ]" Foreground="#FF35FF17"/>
+                            <ListBox Grid.Row="1" x:Name="listBoxToBase"  
+                                    ItemsSource="{Binding BaseItems}" 
+                                    SelectedItem="{Binding SelectedToBaseItem, Mode=TwoWay}"
+                                    Background="Black" Foreground="#FF20C20E"
+                                    BorderThickness="0">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <RadioButton Content="{Binding}"
+                                                    GroupName="ToBaseGroup"
+                                                    Foreground="#FF20C20E"
+                                                    Margin="2,2,2,2" 
+                                                    BorderBrush="#FF20C20E" 
+                                                    BorderThickness="1"
+                                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
                                     </Style>
-                                </ItemsControl.ItemContainerStyle>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </Grid>
+                    </Grid>
+                </Border>
 
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
-                                                Click="Button_Click"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                <Border Grid.Row="1" BorderBrush="#FF20C20E" BorderThickness="1" Margin="5" Padding="5" CornerRadius="3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Name="TextBoxCalculation" 
+                                Background="Black"
+                                BorderThickness="0,0,0,1"
+                                FontSize="16" 
+                                Foreground="#FF92DE86" 
+                                BorderBrush="#FF154D0C" 
+                                TextAlignment="Right" 
+                                IsReadOnly="True" 
+                                Margin="0,0,0,5"
+                                Padding="5"/>
 
-                                <ItemsControl.AlternationCount>1</ItemsControl.AlternationCount>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                        <TextBox Grid.Row="1" Name="TextBoxResult" 
+                                Background="Black" 
+                                BorderThickness="0"
+                                FontSize="24" 
+                                Foreground="#FF20C20E" 
+                                TextAlignment="Right" 
+                                Text="0" 
+                                IsReadOnly="True"
+                                FontWeight="Bold"
+                                Padding="5"/>
+                    </Grid>
+                </Border>
 
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                            </Grid>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                <Border Grid.Row="2" BorderBrush="#FF20C20E" BorderThickness="1" Margin="5" Padding="5" CornerRadius="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto" MinWidth="44"/>
+                        </Grid.ColumnDefinitions>
 
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
+                        <ItemsControl Grid.Column="0" Name="MatrixButtons" ItemsSource="{Binding ButtonsData}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                </Grid>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.AlternationCount>3</ItemsControl.AlternationCount>
-                </ItemsControl>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="ContentPresenter">
+                                                <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
+                                                        Click="Button_Click"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+
+                                        <ItemsControl.AlternationCount>4</ItemsControl.AlternationCount>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+
+                            <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
+                        </ItemsControl>
+
+                        <ItemsControl Name="OperatorsButtons" ItemsSource="{Binding OperatorsData}" Margin="2,0,0,0" Grid.Column="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                </Grid>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="ContentPresenter">
+                                                <Setter Property="Grid.Column" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
+                                                        Click="Button_Click"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+
+                                        <ItemsControl.AlternationCount>1</ItemsControl.AlternationCount>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Grid.Row" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+
+                            <ItemsControl.AlternationCount>3</ItemsControl.AlternationCount>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+
             </Grid>
         </Grid>
-    </DockPanel>
+    </Border>
 </Window>

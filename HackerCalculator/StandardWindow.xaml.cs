@@ -61,17 +61,26 @@ namespace HackerCalculator
 
         public void Cut_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Cut_Executed(sender, e, _activeTextBox, ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Cut_Executed(sender, e, ref calculation, ref _previousOperand, _previousOperator,
+                ref _currentOperand, ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
 
         public void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Copy_Executed(sender, e, _activeTextBox, ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Copy_Executed(sender, e, ref calculation, ref _previousOperand, _previousOperator,
+                ref _currentOperand, ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
 
         public void Paste_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Paste_Executed(sender, e, _activeTextBox, ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Paste_Executed(sender, e, ref calculation, ref _previousOperand, _previousOperator,
+                ref _currentOperand, ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
         public void Edit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -276,7 +285,7 @@ namespace HackerCalculator
 
         private void ButtonMS_Click(object sender, EventArgs e)
         {
-            if (TextBoxResult.Text != String.Empty && TextBoxResult.Text != "Result:")
+            if (TextBoxResult.Text != String.Empty && TextBoxResult.Text != "0")
                 (DataContext as ButtonsStandardViewModel).MemoryResults.Insert(0, TextBoxResult.Text);
         }
         
@@ -347,7 +356,6 @@ namespace HackerCalculator
         {
             String buttonContent = (sender as Button).Content.ToString();
             ComputeAction(buttonContent);
-            //MessageBox.Show(_previousOperand + '\n' + _currentOperand + '\n' + _previousOperator + '\n' + _currentOperator);
         }
 
         private void ChangeWindow_Click(object sender, RoutedEventArgs e)
@@ -359,6 +367,16 @@ namespace HackerCalculator
             mainWindow.Top = currentWindowTop;
             mainWindow.Show();
             this.Close();
+        }
+
+        public void MinimizeButton_Click(object sender,RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        public void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

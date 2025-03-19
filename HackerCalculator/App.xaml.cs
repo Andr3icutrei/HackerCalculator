@@ -115,8 +115,7 @@ namespace HackerCalculator
                     };
                 }
             }
-            JsonHelper.SaveSettings(Settings);
-            
+            JsonHelper.SaveSettings(Settings);  
         }
     }
 }

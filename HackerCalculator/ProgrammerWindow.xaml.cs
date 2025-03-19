@@ -45,7 +45,6 @@ namespace HackerCalculator
         private string _previousOperator;
         private string _currentOperand;
         private string _clipboard;
-        private TextBox _activeTextBox;
 
         public ProgrammerWindow()
         {
@@ -56,41 +55,27 @@ namespace HackerCalculator
             _currentOperand = string.Empty;
             _previousOperator = string.Empty;
 
-            _activeTextBox = TextBoxCalculation;
 
             this.KeyDown += MainWindow_KeyDown;
             this.Closing += ((System.Windows.Application.Current as App)).MainWindow_Closing;
-
-            TextBoxCalculation.GotFocus += TextBox_GotFocus;
-            TextBoxResult.GotFocus += TextBox_GotFocus;
 
         }
         private void About_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Arustei Andrei, IA331");
         }
-        private void TextBox_GotFocus(object sender,RoutedEventArgs e)
-        {
-            if(sender is TextBox tb)
-            {
-                _activeTextBox = tb;
-            }
-        }
 
         private Button FindButtonByContentRecursive(DependencyObject parent, string content)
         {
-            // Loop through all the visual children of the current element.
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
                 var child = VisualTreeHelper.GetChild(parent, i);
 
-                // If the child is a button, check its content.
                 if (child is Button button && button.Content?.ToString() == content)
                 {
                     return button;
                 }
 
-                // If the child is a container, recurse into its children.
                 if (child is DependencyObject depChild)
                 {
                     var foundButton = FindButtonByContentRecursive(depChild, content);
@@ -106,26 +91,34 @@ namespace HackerCalculator
 
         public void Cut_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Cut_Executed(sender,e,_activeTextBox,ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Cut_Executed(sender,e,ref calculation,ref _previousOperand,_previousOperator,
+                ref _currentOperand,ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
 
         public void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Copy_Executed(sender,e,_activeTextBox,ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Copy_Executed(sender, e, ref calculation, ref _previousOperand, _previousOperator,
+                ref _currentOperand, ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
-
         public void Paste_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            CommandManager.Paste_Executed(sender,e, _activeTextBox,ref _clipboard);
+            String calculation = TextBoxCalculation.Text;
+            CommandManager.Paste_Executed(sender, e, ref calculation, ref _previousOperand, _previousOperator,
+                ref _currentOperand, ref _clipboard);
+            TextBoxCalculation.Text = calculation;
         }
         public void Edit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = CommandManager.Edit_CanExecute(_activeTextBox);
+            e.CanExecute = CommandManager.Edit_CanExecute(TextBoxCalculation);
         }
 
         public void Paste_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = CommandManager.Paste_CanExecute(_activeTextBox,ref _clipboard);
+            e.CanExecute = CommandManager.Paste_CanExecute(TextBoxCalculation, ref _clipboard);
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -521,16 +514,20 @@ namespace HackerCalculator
             this.Close();
         }
 
-        private string ConvertBase(string number,int fromBase,int toBase)
-        {
-            string decimalValue = ToBase10(number, fromBase); // Convert to base 10
-            return FromBase10(decimalValue, toBase); // Convert from base 10 to target base
-        }
-
         private void listBoxFromBase_Changed(object sender, RoutedEventArgs e)
         {
             if(TextBoxCalculation!=null)
                 _previousOperand = _previousOperator = _currentOperand = TextBoxCalculation.Text = String.Empty;
+        }
+
+        public void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        public void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
