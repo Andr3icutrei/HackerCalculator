@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HackerCalculator
+namespace HackerCalculator.Model
 {
     public class ButtonData : INotifyPropertyChanged
     {

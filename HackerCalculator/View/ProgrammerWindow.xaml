@@ -1,25 +1,24 @@
-﻿<Window x:Class="HackerCalculator.ProgrammerWindow"
+﻿<Window x:Class="HackerCalculator.View.ProgrammerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HackerCalculator"
+        xmlns:local="clr-namespace:HackerCalculator.ViewModel.Programmer"
+        xmlns:shared="clr-namespace:HackerCalculator.ViewModel"
         mc:Ignorable="d"
         Title="ProgrammerMode" Height="535" Width="336"
         Background="Transparent"
         BorderThickness="1"
-        BorderBrush="#FF20C20E" >
+        BorderBrush="#FF20C20E"
+        Name="Programmer"
+        KeyDown="Window_KeyDown">
+
     <Window.DataContext>
-        <local:ButtonsProgrammerViewModel/>
+        <local:ProgrammerViewModel/>
     </Window.DataContext>
 
-    <Window.CommandBindings>
-        <CommandBinding Command="Cut" Executed="Cut_Executed" CanExecute="Edit_CanExecute"/>
-        <CommandBinding Command="Copy" Executed="Copy_Executed" CanExecute="Edit_CanExecute"/>
-        <CommandBinding Command="Paste" Executed="Paste_Executed" CanExecute="Paste_CanExecute"/>
-    </Window.CommandBindings>
-
     <Window.Resources>
+        <shared:FileOptionsViewModel x:Key="FileOptionsVM"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="4" />
             <Setter Property="Foreground" Value="#FF20C20E" />
@@ -32,9 +31,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="1" 
-                                CornerRadius="3">
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="1" 
+                            CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -114,6 +113,12 @@
         </Style>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+C" Command="{Binding FileOptionsViewModel.CopyCommand}" CommandParameter="{Binding calculationsViewModel.calculation}" />
+        <KeyBinding Gesture="Ctrl+X" Command="{Binding FileOptionsViewModel.CutCommand}" CommandParameter="{Binding calculationsViewModel.calculation}"/>
+        <KeyBinding Gesture="Ctrl+V" Command="{Binding FileOptionsViewModel.PasteCommand}" CommandParameter="{Binding calculationsViewModel.calculation}"/>
+    </Window.InputBindings>
+
     <Border Background="Black" BorderBrush="#FF20C20E" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
@@ -139,9 +144,12 @@
             <DockPanel Grid.Row="1">
                 <Menu DockPanel.Dock="Top" Background="Black" Foreground="#FF20C20E" BorderBrush="#FF20C20E" BorderThickness="0,0,0,1">
                     <MenuItem Header="[_File]">
-                        <MenuItem Header="Cut" Command="Cut" InputGestureText="Ctrl+X"/>
-                        <MenuItem Header="Copy" Command="Copy" InputGestureText="Ctrl+C"/>
-                        <MenuItem Header="Paste" Command="Paste" InputGestureText="Ctrl+V"/>
+                        <MenuItem Header="Cut" Command="{Binding FileOptionsViewModel.CutCommand}" 
+                                  CommandParameter="{Binding CalculationsViewModel.calculation}" InputGestureText="Ctrl+X"/>
+                        <MenuItem Header="Copy" Command="{Binding FileOptionsViewModel.CopyCommand}"
+                                  CommandParameter="{Binding CalculationsViewModel.calculation}" InputGestureText="Ctrl+C"/>
+                        <MenuItem Header="Paste" Command="{Binding FileOptionsViewModel.PasteCommand}"
+                                  CommandParameter="{Binding CalculationsViewModel.calculation}" InputGestureText="Ctrl+V"/>
                     </MenuItem>
                     <MenuItem Header="[_Mode]">
                         <MenuItem Header="Switch to Standard" Click="ChangeWindow_Click"/>
@@ -173,11 +181,10 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Content="[ FROM BASE ]" Foreground="#FF35FF17"/>
                             <ListBox Grid.Row="1" x:Name="listBoxFromBase" 
-                                    ItemsSource="{Binding BaseItems}" 
-                                    SelectedItem="{Binding SelectedFromBaseItem, Mode=TwoWay}"
+                                    ItemsSource="{Binding UiViewModel.BaseItems}" 
+                                    SelectedItem="{Binding UiViewModel.SelectedFromBaseItem, Mode=TwoWay}"
                                     Background="Black" Foreground="#FF20C20E"
-                                    BorderThickness="0"
-                                    SelectionChanged="listBoxFromBase_Changed">
+                                    BorderThickness="0">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="Template">
@@ -205,8 +212,8 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Content="[ TO BASE ]" Foreground="#FF35FF17"/>
                             <ListBox Grid.Row="1" x:Name="listBoxToBase"  
-                                    ItemsSource="{Binding BaseItems}" 
-                                    SelectedItem="{Binding SelectedToBaseItem, Mode=TwoWay}"
+                                    ItemsSource="{Binding UiViewModel.BaseItems}" 
+                                    SelectedItem="{Binding UiViewModel.SelectedToBaseItem, Mode=TwoWay}"
                                     Background="Black" Foreground="#FF20C20E"
                                     BorderThickness="0">
                                 <ListBox.ItemContainerStyle>
@@ -246,7 +253,8 @@
                                 TextAlignment="Right" 
                                 IsReadOnly="True" 
                                 Margin="0,0,0,5"
-                                Padding="5"/>
+                                Padding="5"
+                                Text="{Binding CalculationsViewModel.calculation.CompleteCalculation,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBox Grid.Row="1" Name="TextBoxResult" 
                                 Background="Black" 
@@ -254,10 +262,10 @@
                                 FontSize="24" 
                                 Foreground="#FF20C20E" 
                                 TextAlignment="Right" 
-                                Text="0" 
                                 IsReadOnly="True"
                                 FontWeight="Bold"
-                                Padding="5"/>
+                                Padding="5"
+                                Text="{Binding CalculationsViewModel.Result,UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
 
@@ -268,7 +276,7 @@
                             <ColumnDefinition Width="Auto" MinWidth="44"/>
                         </Grid.ColumnDefinitions>
 
-                        <ItemsControl Grid.Column="0" Name="MatrixButtons" ItemsSource="{Binding ButtonsData}">
+                        <ItemsControl Grid.Column="0" Name="MatrixButtons" ItemsSource="{Binding UiViewModel.ButtonsData}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <ItemsControl ItemsSource="{Binding}">
@@ -294,7 +302,9 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
-                                                        Click="Button_Click"/>
+                                                        Command="{Binding DataContext.ButtonClickCommand, 
+                                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding Content}"/>      
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
 
@@ -326,7 +336,7 @@
                             <ItemsControl.AlternationCount>5</ItemsControl.AlternationCount>
                         </ItemsControl>
 
-                        <ItemsControl Name="OperatorsButtons" ItemsSource="{Binding OperatorsData}" Margin="2,0,0,0" Grid.Column="1">
+                        <ItemsControl Name="OperatorsButtons" ItemsSource="{Binding UiViewModel.OperatorsData}" Margin="2,0,0,0" Grid.Column="1">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <ItemsControl ItemsSource="{Binding}">
@@ -349,7 +359,9 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button Content="{Binding Content}" IsEnabled="{Binding IsEnabled}"
-                                                        Click="Button_Click"/>
+                                                        Command="{Binding DataContext.ButtonClickCommand, 
+                                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding Content}"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
 

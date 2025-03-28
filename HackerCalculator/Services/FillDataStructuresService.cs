@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using HackerCalculator.Model;
 
-namespace HackerCalculator
+namespace HackerCalculator.Services
 {
     public enum Operators : UInt16
     {
@@ -69,7 +70,7 @@ namespace HackerCalculator
         C,
         DEL
     }
-    public static class FillDataStructures
+    public static class FillDataStructuresService
     {
         public static Dictionary<Operators, String> FillDictOperators()
         {

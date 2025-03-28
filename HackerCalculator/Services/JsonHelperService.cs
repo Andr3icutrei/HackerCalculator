@@ -5,10 +5,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
+using HackerCalculator.Model;
 
-namespace HackerCalculator
+namespace HackerCalculator.Services
 {
-    public class JsonHelper
+    public class JsonHelperService
     {
         private static readonly String filePath = "settings.json";
 

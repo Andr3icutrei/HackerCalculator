@@ -5,6 +5,10 @@ using System.IO;
 using System.Windows;
 using System.Windows.Markup;
 using System.Xaml;
+using HackerCalculator.ViewModel.Programmer;
+using HackerCalculator.Model;
+using HackerCalculator.View;
+using HackerCalculator.Services;
 
 namespace HackerCalculator
 {
@@ -18,7 +22,7 @@ namespace HackerCalculator
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Settings = JsonHelper.LoadSettings();
+            Settings = JsonHelperService.LoadSettings();
 
             if (Settings.IsStandardMode)
                 LoadStandardMode(Settings);
@@ -26,51 +30,29 @@ namespace HackerCalculator
                 LoadProgrammerMode(Settings);
         }
 
-        private String GetProjectRootDirectory()
-        {
-            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            DirectoryInfo parentDir = directory.Parent;
-
-            if (parentDir != null && (parentDir.Name.Equals("Debug", StringComparison.OrdinalIgnoreCase)
-                || parentDir.Name.Equals("Release", StringComparison.OrdinalIgnoreCase)))
-            {
-                parentDir = parentDir.Parent;
-            }
-
-            if (parentDir != null && parentDir.Name.Equals("bin", StringComparison.OrdinalIgnoreCase))
-            {
-                parentDir = parentDir.Parent;
-            }
-
-            return parentDir?.FullName;
-        }
-
         private void LoadStandardMode(AppSettings settings)
         {
-            string projectDir = GetProjectRootDirectory();
-            string standardXamlPath = Path.Combine(projectDir, "StandardWindow.xaml");
+            string standardXamlPath = "./View/StandardWindow.xaml";
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                HackerCalculator.StandardWindow window = new HackerCalculator.StandardWindow();
+                StandardWindow window = new StandardWindow();
                 window.CheckBoxDigitGrouping.IsChecked = settings.IsDigitGroupingActive;
                 window.Show();
             });
         }
 
         private void LoadProgrammerMode(AppSettings settings)
-        {
-            string projectDir = GetProjectRootDirectory();
-            string standardXamlPath = Path.Combine(projectDir, "ProgrammerWindow.xaml");
+        {   
+            string standardXamlPath = "./View/ProgrammerWindow.xaml";
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                HackerCalculator.ProgrammerWindow window = new HackerCalculator.ProgrammerWindow();
-                if (window.DataContext is ButtonsProgrammerViewModel viewModel)
+                ProgrammerWindow window = new ProgrammerWindow();
+                if (window.DataContext is ProgrammerViewModel viewModel)
                 {
-                    viewModel.SelectedFromBaseItem = settings.FromBase;
-                    viewModel.SelectedToBaseItem = settings.ToBase;
+                    viewModel.UiViewModel.SelectedFromBaseItem = settings.FromBase;
+                    viewModel.UiViewModel.SelectedToBaseItem = settings.ToBase;
                 }
                 window.Show();
             });
@@ -87,7 +69,7 @@ namespace HackerCalculator
 
         public void SaveWindowSettings(Window activeWindow)
         {
-            if (activeWindow.GetType().Name == "StandardWindow")
+            if (activeWindow.GetType().Name == "Standard")
             {
                 bool isDigitGroupingChecked = (activeWindow as StandardWindow)?.CheckBoxDigitGrouping?.IsChecked ?? false;
 
@@ -102,10 +84,10 @@ namespace HackerCalculator
             }
             else
             {
-                if (activeWindow.DataContext is ButtonsProgrammerViewModel viewModel)
+                if (activeWindow.DataContext is ProgrammerViewModel viewModel)
                 {
-                    var fromSelectedBase = viewModel.SelectedFromBaseItem;
-                    var toSelectedBase = viewModel.SelectedToBaseItem;
+                    var fromSelectedBase = viewModel.UiViewModel.SelectedFromBaseItem;
+                    var toSelectedBase = viewModel.UiViewModel.SelectedToBaseItem;
                     Settings = new AppSettings
                     {
                         IsStandardMode = false,
@@ -115,7 +97,7 @@ namespace HackerCalculator
                     };
                 }
             }
-            JsonHelper.SaveSettings(Settings);  
+            JsonHelperService.SaveSettings(Settings);  
         }
     }
 }
