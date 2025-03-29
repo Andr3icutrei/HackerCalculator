@@ -18,7 +18,7 @@ bld/
 [Oo]bj/
 
 # Allow settings.json in bin/
-!bin/settings.json
+!bin/Debug/net8.0-windows/settings.json
 
 # Roslyn cache directories
 *.ide/
