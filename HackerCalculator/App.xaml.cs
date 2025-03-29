@@ -69,7 +69,7 @@ namespace HackerCalculator
 
         public void SaveWindowSettings(Window activeWindow)
         {
-            if (activeWindow.GetType().Name == "Standard")
+            if (activeWindow.GetType().Name == "StandardWindow")
             {
                 bool isDigitGroupingChecked = (activeWindow as StandardWindow)?.CheckBoxDigitGrouping?.IsChecked ?? false;
 

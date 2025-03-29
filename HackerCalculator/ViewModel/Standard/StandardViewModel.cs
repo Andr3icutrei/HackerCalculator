@@ -69,7 +69,6 @@ namespace HackerCalculator.ViewModel.Standard
         public void CheckBoxDigitGrouping_Check()
         {
             ComupteCalculationsService.UpdateDisplayWithGrouping(calculationsViewModel.calculation);
-            
         }
 
         private void ButtonMC_Click(object parameter)
@@ -102,5 +101,38 @@ namespace HackerCalculator.ViewModel.Standard
             String content = (string)parameter;
             calculationsViewModel.ComputeAction(content, IsDigitGroupingChecked);
         }
+
+        public ICommand HandleKeyPressCommand => new RelayCommandGeneric<KeyEventArgs>(e =>
+        {
+            if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+            {
+                int numberPressed = (e.Key >= Key.D0 && e.Key <= Key.D9)
+                    ? e.Key - Key.D0
+                    : e.Key - Key.NumPad0;
+                calculationsViewModel.ComputeAction(Convert.ToString(numberPressed),isDigitGroupingChecked);
+            }
+
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOperators[Operators.Equals], isDigitGroupingChecked);
+                    break;
+                case Key.Escape:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOtherOperations[OtherOperations.CE], isDigitGroupingChecked);
+                    break;
+                case Key.Multiply:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOperators[Operators.Multiply], isDigitGroupingChecked);
+                    break;
+                case Key.Add:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOperators[Operators.Addition], isDigitGroupingChecked);
+                    break;
+                case Key.Subtract:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOperators[Operators.Subtract], isDigitGroupingChecked);
+                    break;
+                case Key.Divide:
+                    calculationsViewModel.ComputeAction(ButtonsContents.DictOperators[Operators.Division], isDigitGroupingChecked);
+                    break;
+            }
+        });
     }
 }

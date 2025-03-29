@@ -19,6 +19,8 @@ using static System.Net.Mime.MediaTypeNames;
 using HackerCalculator.Model;
 using HackerCalculator.Services;
 using HackerCalculator.ViewModel;
+using HackerCalculator.ViewModel.Programmer;
+using HackerCalculator.ViewModel.Standard;
 
 namespace HackerCalculator.View
 {
@@ -39,8 +41,14 @@ namespace HackerCalculator.View
         {
             MessageBox.Show("Arustei Andrei, IA331");
         }
-        
 
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (DataContext is StandardViewModel viewModel)
+            {
+                viewModel.HandleKeyPressCommand.Execute(e);
+            }
+        }
         private void ChangeWindow_Click(object sender, RoutedEventArgs e)
         {
             WindowManagerService.ChangeWindow(this,AvailableWindow.ProgrammerWindow);

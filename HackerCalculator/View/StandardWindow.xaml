@@ -10,7 +10,8 @@
         Background="Transparent"
         BorderThickness="1"
         BorderBrush="#FF20C20E"
-        Name="Standard">
+        Name="Standard"
+        KeyDown="Window_KeyDown">
 
     <Window.DataContext>
         <viewModel:StandardViewModel/>
@@ -203,8 +204,8 @@
                                 <Button Content="M+" Grid.Column="2" Margin="2" Command="{Binding ButtonMAddCommand}" FontSize="14"/>
                                 <Button Content="M-" Grid.Column="3" Margin="2" Command="{Binding ButtonMSubstractCommand}" FontSize="14"/>
                                 <Button Content="MS" Grid.Column="4" Margin="2" Command="{Binding ButtonMSCommand}" FontSize="14"/>
-                                <ComboBox ItemsSource="{Binding MemoryResults}" 
-                                      SelectedItem="{Binding SelectedResult, Mode=TwoWay}" 
+                                <ComboBox ItemsSource="{Binding memoryViewModel.Memory}" 
+                                      SelectedItem="{Binding memoryViewModel.SelectedResult, Mode=TwoWay}" 
                                       Grid.Column="5" Margin="2" 
                                       Text="M" 
                                       Foreground="#FF20C20E" 
