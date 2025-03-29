@@ -17,6 +17,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+# Allow settings.json in bin/
+!bin/settings.json
+
 # Roslyn cache directories
 *.ide/
 
@@ -24,7 +27,7 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
-#NUNIT
+# NUNIT
 *.VisualState.xml
 TestResult.xml
 
@@ -85,7 +88,7 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# JustCode is a .NET coding addin-in
+# JustCode is a .NET coding add-in
 .JustCode
 
 # TeamCity is a build add-in
