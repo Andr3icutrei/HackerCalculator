@@ -12,5 +12,13 @@ namespace HackerCalculator.Model
         public bool IsStandardMode { get; set; }
         public String FromBase { get; set; }
         public String ToBase { get; set; }
+
+        public AppSettings()
+        {
+            IsDigitGroupingActive = false;
+            IsStandardMode = true;
+            FromBase = "Decimal";
+            ToBase = "Decimal";
+        }
     }
 }

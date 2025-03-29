@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\services\\jsonhelperservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\services\\jsonhelperservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\model\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\model\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -79,10 +87,6 @@
       "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\services\\clipboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\services\\jsonhelperservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\services\\jsonhelperservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\services\\filldatastructuresservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\services\\filldatastructuresservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -99,10 +103,6 @@
       "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\model\\calculation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\model\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\model\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|d:\\faculty\\anul2sem2\\mvp\\hackercalculator\\hackercalculator\\hackercalculator\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{772FB867-3E7B-4E87-A340-BDAC5113DCB8}|HackerCalculator\\HackerCalculator.csproj|solutionrelative:hackercalculator\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
@@ -114,7 +114,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 254,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -122,7 +122,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "IdentifierService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\IdentifierService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\IdentifierService.cs",
@@ -134,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "ButtonsContents.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\ButtonsContents.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Model\\ButtonsContents.cs",
@@ -146,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "WindowManagerService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\WindowManagerService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\WindowManagerService.cs",
@@ -154,12 +154,11 @@
               "RelativeToolTip": "HackerCalculator\\Services\\WindowManagerService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-28T10:15:29.528Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-28T10:15:29.528Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "RelayCommandGeneric.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\RelayCommandGeneric.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Model\\RelayCommandGeneric.cs",
@@ -171,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "Calculation.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\Calculation.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Model\\Calculation.cs",
@@ -183,7 +182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "FillDataStructuresService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\FillDataStructuresService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\FillDataStructuresService.cs",
@@ -195,15 +194,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 0,
               "Title": "JsonHelperService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\JsonHelperService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\JsonHelperService.cs",
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\JsonHelperService.cs",
               "RelativeToolTip": "HackerCalculator\\Services\\JsonHelperService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwAsAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwBgAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T20:46:28.283Z"
+              "WhenOpened": "2025-03-27T20:46:28.283Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -214,37 +214,37 @@
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\App.xaml",
               "RelativeToolTip": "HackerCalculator\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-27T19:57:53.482Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T19:57:53.482Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 1,
               "Title": "AppSettings.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\AppSettings.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Model\\AppSettings.cs",
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\AppSettings.cs",
               "RelativeToolTip": "HackerCalculator\\Model\\AppSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAcwBQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T19:30:25.404Z"
+              "WhenOpened": "2025-03-27T19:30:25.404Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\App.xaml.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\App.xaml.cs",
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\App.xaml.cs",
               "RelativeToolTip": "HackerCalculator\\App.xaml.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAwwEsAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAwFoAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-27T19:26:11.327Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Model\\RelayCommand.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Model\\RelayCommand.cs",
@@ -256,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "CalculationsViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Standard\\CalculationsViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Standard\\CalculationsViewModel.cs",
@@ -264,12 +264,11 @@
               "RelativeToolTip": "HackerCalculator\\ViewModel\\Standard\\CalculationsViewModel.cs",
               "ViewState": "AgIAAFIAAAAAAAAAAAAawGEAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:53:48.74Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:53:48.74Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "UIViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Programmer\\UIViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Programmer\\UIViewModel.cs",
@@ -281,7 +280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "UIViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Standard\\UIViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Standard\\UIViewModel.cs",
@@ -289,12 +288,11 @@
               "RelativeToolTip": "HackerCalculator\\ViewModel\\Standard\\UIViewModel.cs",
               "ViewState": "AgIAAB4AAAAAAAAAAAAYwDYAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:35:37.926Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:35:37.926Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "ComputeCalculationsService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\ComputeCalculationsService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\ComputeCalculationsService.cs",
@@ -306,7 +304,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "ClipboardService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\ClipboardService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\ClipboardService.cs",
@@ -318,7 +316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "StandardViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Standard\\StandardViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Standard\\StandardViewModel.cs",
@@ -326,12 +324,11 @@
               "RelativeToolTip": "HackerCalculator\\ViewModel\\Standard\\StandardViewModel.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAA5wCQAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:34:34.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:34:34.739Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ProgrammerViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Programmer\\ProgrammerViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Programmer\\ProgrammerViewModel.cs",
@@ -339,12 +336,11 @@
               "RelativeToolTip": "HackerCalculator\\ViewModel\\Programmer\\ProgrammerViewModel.cs",
               "ViewState": "AgIAAB0AAAAAAAAAAAAswC8AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:31:08.248Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:31:08.248Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "StandardWindow.xaml.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\StandardWindow.xaml.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\View\\StandardWindow.xaml.cs",
@@ -352,12 +348,11 @@
               "RelativeToolTip": "HackerCalculator\\View\\StandardWindow.xaml.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAYwC4AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:26:49.9Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:26:49.9Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "CalculationsViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Programmer\\CalculationsViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Programmer\\CalculationsViewModel.cs",
@@ -369,7 +364,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "ProgrammerWindow.xaml.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\ProgrammerWindow.xaml.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\View\\ProgrammerWindow.xaml.cs",
@@ -377,12 +372,11 @@
               "RelativeToolTip": "HackerCalculator\\View\\ProgrammerWindow.xaml.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABoAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:18:26.473Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:18:26.473Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "ValidationService.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\Services\\ValidationService.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\Services\\ValidationService.cs",
@@ -390,12 +384,11 @@
               "RelativeToolTip": "HackerCalculator\\Services\\ValidationService.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAUwAwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-28T13:31:29.018Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-28T13:31:29.018Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "FileOptionsViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\FileOptionsViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\FileOptionsViewModel.cs",
@@ -407,7 +400,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "MemoryViewModel.cs",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\ViewModel\\Standard\\MemoryViewModel.cs",
               "RelativeDocumentMoniker": "HackerCalculator\\ViewModel\\Standard\\MemoryViewModel.cs",
@@ -415,32 +408,29 @@
               "RelativeToolTip": "HackerCalculator\\ViewModel\\Standard\\MemoryViewModel.cs",
               "ViewState": "AgIAAEoAAAAAAAAAAAAwwFQAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T17:41:17.609Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:41:17.609Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ProgrammerWindow.xaml",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\ProgrammerWindow.xaml",
               "RelativeDocumentMoniker": "HackerCalculator\\View\\ProgrammerWindow.xaml",
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\ProgrammerWindow.xaml",
               "RelativeToolTip": "HackerCalculator\\View\\ProgrammerWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-27T17:14:09.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:14:09.602Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "StandardWindow.xaml",
               "DocumentMoniker": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\StandardWindow.xaml",
               "RelativeDocumentMoniker": "HackerCalculator\\View\\StandardWindow.xaml",
               "ToolTip": "D:\\faculty\\anul2sem2\\MVP\\HackerCalculator\\HackerCalculator\\HackerCalculator\\View\\StandardWindow.xaml",
               "RelativeToolTip": "HackerCalculator\\View\\StandardWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-27T17:50:26.601Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T17:50:26.601Z"
             }
           ]
         }
