@@ -1,8 +1,8 @@
-#HackerCalculator
+# HackerCalculator
 
 Black-green themed advanced calculator application using MVVM design architecture in WPF.
 
-#Instructions of use: 
+# Instructions of use: 
 
 - in order to begin computing mathematical calculations, the user may click the digit buttons on the window or press the numpad/keyboard digit buttons and ordinary calculation operators of the numpad (=,-,/,*)
 
